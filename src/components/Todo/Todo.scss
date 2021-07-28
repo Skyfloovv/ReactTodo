@@ -1,0 +1,14 @@
+.Todo {
+  width: 100% ;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 5px;
+  flex: 1 1 300px;
+  .strike{
+    text-decoration: line-through;
+    color:red;
+  }
+}

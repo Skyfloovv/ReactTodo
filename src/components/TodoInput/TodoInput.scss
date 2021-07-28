@@ -1,0 +1,15 @@
+.TodoInput {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  .TodoForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    div{
+      padding-bottom: 5px;
+    }
+  }
+}
