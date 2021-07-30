@@ -1,10 +1,7 @@
 import React from 'react';
 import './Header.scss';
 
- export interface Props{
-    text:string;
-}
-const Header:React.FC<Props> = ({text}) => (
+const Header:React.FC<{ text: string }> = ({text}) => (
   <div className="Header">
       {text}
   </div>
