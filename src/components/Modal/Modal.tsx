@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import {
   Dialog,
   Typography,
@@ -32,60 +32,63 @@ const DialogTitle1 = (props: DialogTitleProps) => {
 };
 
 export const Modal: FC<
-  ModalProps & { isOpen: boolean; setOpen: (state: boolean) => void }
+  ModalProps & {
+    isOpen: boolean;
+    setOpen: (state: boolean) => void;
+    handleClose: () => void;
+  }
 > = ({
   isOpen,
+  handleClose,
   firstButton,
   secondButton,
-  contentText,
+  content,
   setOpen,
   headerText,
 }) => {
   const s = useStyles();
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
   return (
-    <div>
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={isOpen}
-      >
-        <DialogTitle1 id="customized-dialog-title" onClose={handleClose}>
-          {headerText}
-        </DialogTitle1>
-        <DialogContent className={s.dialogContent} dividers>
-          <Typography gutterBottom>{contentText}</Typography>
-        </DialogContent>
-        <DialogActions className={s.dialogActions}>
-          {firstButton ? (
-            <Button
-              variant="contained"
-              onClick={firstButton.buttonHandler}
-              color="primary"
-            >
-              {firstButton.buttonText}
-            </Button>
-          ) : (
-            <div></div>
-          )}
-          {secondButton ? (
-            <Button
-              autoFocus
-              variant="contained"
-              onClick={secondButton.buttonHandler}
-              color="primary"
-            >
-              {secondButton.buttonText}
-            </Button>
-          ) : (
-            <div></div>
-          )}
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="customized-dialog-title"
+      open={isOpen}
+    >
+      <DialogTitle1 id="customized-dialog-title" onClose={handleClose}>
+        {headerText}
+      </DialogTitle1>
+      <DialogContent className={s.dialogContent} dividers>
+        {typeof content !== "string" ? (
+          content
+        ) : (
+          <Typography gutterBottom>{content}</Typography>
+        )}
+      </DialogContent>
+      <DialogActions className={s.dialogActions}>
+        {firstButton && (
+          <Button
+            variant="contained"
+            onClick={firstButton.buttonHandler}
+            color="primary"
+          >
+            {firstButton.buttonText}
+          </Button>
+        )}
+        {secondButton && (
+          <Button
+            autoFocus
+            variant="contained"
+            onClick={secondButton.buttonHandler}
+            color="primary"
+          >
+            {secondButton.buttonText}
+          </Button>
+        )}
+      </DialogActions>
+    </Dialog>
   );
 };

@@ -1,38 +1,53 @@
-import { deleteTodoForType } from "../service/todo.service";
-import { FilterType, ITodo } from "../models/todo.model";
+import { FilterType } from "../models/todo.model";
+import { ModalProps } from "./Modal";
 
 interface PropsForGetModalPropsForDeleteTask {
-  setOpenConfirmModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setTodos: React.Dispatch<React.SetStateAction<ITodo[]>>;
-  filterTodos: ITodo[];
   id?: number;
   deleteType?: FilterType;
+  deleteHandler: (props: any) => void;
+  handleClose: () => void;
 }
 
 export const getModalPropsForDeleteTask = ({
   deleteType,
-  filterTodos,
-  setOpenConfirmModal,
   id,
-  setTodos,
-}: PropsForGetModalPropsForDeleteTask) => {
+  deleteHandler,
+  handleClose,
+}: PropsForGetModalPropsForDeleteTask): ModalProps => {
   return {
-    contentText: "if you delete this you won't be able to revert the changes",
+    content: "if you delete this you won't be able to revert the changes",
     headerText: id && !deleteType ? "Remove this task" : "Remove all tasks",
     firstButton: {
       buttonHandler: () => {
-        setOpenConfirmModal(false);
+        handleClose();
       },
       buttonText: "Cancel",
     },
     secondButton: {
       buttonHandler: () => {
-        id && !deleteType
-          ? setTodos(filterTodos.filter((item) => item.id !== id))
-          : setTodos((prevState) => {
-              return deleteTodoForType(deleteType!, prevState);
-            });
-        setOpenConfirmModal(false);
+        id ? deleteHandler(id) : deleteHandler(deleteType);
+      },
+      buttonText: "Apply",
+    },
+  };
+};
+export const getModalPropsForEditTask = ({
+  deleteType,
+  id,
+  deleteHandler,
+  handleClose,
+}: PropsForGetModalPropsForDeleteTask): ModalProps => {
+  return {
+    headerText: id && !deleteType ? "Remove this task" : "Remove all tasks",
+    firstButton: {
+      buttonHandler: () => {
+        handleClose();
+      },
+      buttonText: "Cancel",
+    },
+    secondButton: {
+      buttonHandler: () => {
+        id ? deleteHandler(id) : deleteHandler(deleteType);
       },
       buttonText: "Apply",
     },

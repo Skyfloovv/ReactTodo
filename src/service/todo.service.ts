@@ -27,7 +27,7 @@ export const getTodos = (): Promise<ITodo[]> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(todos);
-    }, 500);
+    }, 1000);
   });
 };
 export const filterTodoForType = (

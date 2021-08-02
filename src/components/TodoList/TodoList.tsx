@@ -1,53 +1,58 @@
 import React, { FC, useEffect, useState } from "react";
 import "./TodoList.scss";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { List, ListItem } from "@material-ui/core";
+import {
+  Backdrop,
+  CircularProgress,
+  List,
+  ListItem,
+  TextField,
+} from "@material-ui/core";
 import { filterTodoForType } from "../../service/todo.service";
 import { Modal, ModalProps } from "../Modal";
 import { useDebounce } from "../../hooks/debounce";
 import {
+  Todo,
+  TodoInput,
   TodoListFooterAction,
   TodoListHeaderAction,
-  TodoInput,
-  Todo,
 } from "./";
 import { useModal } from "../../hooks/useModal";
 import { getModalPropsForDeleteTask } from "../utils";
 import { FilterType, ITodo } from "../../models/todo.model";
-import { ModalEdit } from "../ModalEdit/ModalEdit";
-import { loadTodosThunk } from "../../store/todos/todos";
-import { StateType } from "../../store/store";
+import { TodoAction } from "../../store/todos/action";
+import { StateType, useDispatch, useSelector } from "../../store/store";
 import { ThunkDispatch } from "redux-thunk";
 
 const TodoList: FC<any> = () => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
   const [filterTodos, setFilterTodos] = useState<ITodo[]>([]);
   const [todo, setTodo] = useState<ITodo | null>(null);
   const [newTodo, setNewTodo] = useState<string>("");
   const [search, setSearch] = useState<string>("");
-  const { modalOpen: openConfirmModal, setModalOpen: setOpenConfirmModal } =
-    useModal();
-  const { modalOpen: openEditModal, setModalOpen: setOpenEditModal } =
-    useModal();
+  const {
+    modalOpen: openConfirmModal,
+    setModalOpen: setOpenConfirmModal,
+    toggle: ConfirmModalToggle,
+  } = useModal();
   const [modalOption, setModalOption] = useState<ModalProps>();
   const debouncedSearchTerm: string = useDebounce<string>(search, 500);
-  // const searchInput: MutableRefObject<HTMLInputElement | null> = useRef(null);
 
-  const todos_ = useSelector(({ todo }: StateType) => todo.todos);
-  const dispatch: ThunkDispatch<
+  const todos = useSelector((state) => state.todo.todos);
+  const isLoading = useSelector((state) => state.todo.isLoading);
+  const ThunkDispatch: ThunkDispatch<
     StateType,
     undefined,
     { type: string; payload?: any }
   > = useDispatch();
+  const dispatch = useDispatch();
+  const modalClose = () => {
+    ConfirmModalToggle();
+    setModalOption(undefined);
+    setTodo(null);
+  };
 
   useEffect(() => {
-    dispatch(loadTodosThunk());
-  }, []);
-
-  useEffect(() => {
-    if (!todos_) return;
-    setTodos(todos_);
-  }, [todos_]);
+    ThunkDispatch(TodoAction.loadTodosThunk());
+  }, [ThunkDispatch]);
 
   useEffect(() => {
     filter(FilterType.ALL);
@@ -65,38 +70,47 @@ const TodoList: FC<any> = () => {
     }
   }, [debouncedSearchTerm, todos]);
 
+  useEffect(() => {
+    if (!todo) return;
+    setModalOption({
+      content: (
+        <TextField
+          label={"Edit"}
+          onChange={editTodoHandler}
+          value={todo?.text}
+        />
+      ),
+      headerText: "Edit Todo",
+      firstButton: {
+        buttonText: "Cancel",
+        buttonHandler: modalClose,
+      },
+      secondButton: {
+        buttonText: "Apply",
+        buttonHandler: saveEditTodo,
+      },
+    });
+    if (!modalOption) ConfirmModalToggle();
+  }, [todo]);
+
   const createNewTodo: React.ChangeEventHandler<HTMLInputElement> = ({
     target,
   }) => {
-    if (todo === null && target.value.trim() !== "") {
+    if (!todo && target.value !== " ") {
       setNewTodo(target.value);
     }
   };
   const saveChanges = () => {
     if (newTodo) {
-      setTodos([
-        ...todos,
-        {
-          id: todos.length + 1,
-          checked: false,
-          text: newTodo,
-        },
-      ]);
+      dispatch(TodoAction.addTodo(newTodo));
       setNewTodo("");
     }
   };
   const saveEditTodo = () => {
     if (todo !== null) {
-      setTodos(
-        todos.map((item) => {
-          if (item.id === todo.id) {
-            item.text = todo.text;
-          }
-          return item;
-        })
-      );
+      dispatch(TodoAction.editTodo(todo));
       setTodo(null);
-      setOpenEditModal(false);
+      modalClose();
     }
   };
   const editTodoHandler: React.ChangeEventHandler<HTMLInputElement> = ({
@@ -108,29 +122,13 @@ const TodoList: FC<any> = () => {
   };
 
   const OnChecked = (id: number) => {
-    const newState = todos.map((res) => {
-      if (res.id === id) return { ...res, checked: !res.checked };
-      return res;
-    });
-    setTodos(newState);
-  };
-  const deleteTodo = (id: number) => {
-    setModalOption(
-      getModalPropsForDeleteTask({
-        setOpenConfirmModal,
-        setTodos,
-        filterTodos,
-        id,
-      })
-    );
-    setOpenConfirmModal(true);
+    dispatch(TodoAction.checkTodo(id));
   };
 
   const editTodo = (id: number) => {
     const changesTodo = todos.find((item) => item.id === id);
     if (changesTodo) {
       setTodo(changesTodo);
-      setOpenEditModal(true);
     }
   };
   const filter = (filter: FilterType) => {
@@ -142,32 +140,48 @@ const TodoList: FC<any> = () => {
   }) => {
     setSearch(target.value);
   };
-  const deleteTasks = (deleteType: FilterType) => {
-    setModalOption(
-      getModalPropsForDeleteTask({
-        setOpenConfirmModal,
-        setTodos,
-        filterTodos,
-        deleteType,
-      })
-    );
-    setOpenConfirmModal(true);
+  const openModalForDelete = (typeOrId: FilterType | number) => {
+    if (typeof typeOrId === "number") {
+      setModalOption(
+        getModalPropsForDeleteTask({
+          id: typeOrId,
+          handleClose: modalClose,
+          deleteHandler: deleteTodo,
+        })
+      );
+      ConfirmModalToggle();
+    } else {
+      setModalOption(
+        getModalPropsForDeleteTask({
+          deleteType: typeOrId,
+          handleClose: modalClose,
+          deleteHandler: deleteTasks,
+        })
+      );
+      ConfirmModalToggle();
+    }
   };
-
+  const deleteTodo = (id: number) => {
+    dispatch(TodoAction.deleteTodo(id));
+    modalClose();
+  };
+  const deleteTasks = (deleteType: FilterType) => {
+    switch (deleteType) {
+      case FilterType.ALL: {
+        dispatch(TodoAction.deleteAllTodo());
+        break;
+      }
+      case FilterType.DONE: {
+        dispatch(TodoAction.deleteCheckTodo());
+        break;
+      }
+      default:
+        break;
+    }
+    modalClose();
+  };
   return (
     <div className="TodoListContainer">
-      <Modal
-        {...modalOption!}
-        setOpen={setOpenConfirmModal}
-        isOpen={openConfirmModal}
-      />
-      <ModalEdit
-        changeTodo={editTodoHandler}
-        saveChanges={saveEditTodo}
-        todo={todo?.text}
-        isOpen={openEditModal}
-        setOpen={setOpenEditModal}
-      />
       <TodoInput
         newTodo={createNewTodo}
         todo={newTodo}
@@ -182,7 +196,7 @@ const TodoList: FC<any> = () => {
                 <Todo
                   {...item}
                   OnChecked={OnChecked}
-                  deleteTodo={deleteTodo}
+                  deleteTodo={openModalForDelete}
                   editTodo={editTodo}
                 />
               </ListItem>
@@ -196,11 +210,23 @@ const TodoList: FC<any> = () => {
               alignItems: "center",
             }}
           >
-            <span>Todo List is empty</span>
+            {isLoading ? (
+              <Backdrop open={isLoading}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            ) : (
+              <span>Todo List is empty</span>
+            )}
           </ListItem>
         )}
       </List>
-      <TodoListFooterAction deleteTasks={deleteTasks} />
+      <TodoListFooterAction deleteTasks={openModalForDelete} />
+      <Modal
+        {...modalOption!}
+        setOpen={setOpenConfirmModal}
+        isOpen={openConfirmModal}
+        handleClose={modalClose}
+      />
     </div>
   );
 };

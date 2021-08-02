@@ -14,7 +14,12 @@ export const TodoInput: FC<TodoInputProps> = ({
       <Header text="Todo Input" />
       <div className="TodoForm">
         <TextField label={"New Todo"} value={todo} onChange={newTodo} />
-        <Button variant="contained" color="primary" onClick={saveChanges}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!todo}
+          onClick={saveChanges}
+        >
           {"Add new task"}
         </Button>
       </div>
