@@ -1,16 +1,24 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
-  Dialog,
-  Typography,
-  IconButton,
   Button,
-  DialogTitle,
-  DialogContent,
+  Dialog,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  TextField,
+  Typography,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { useStyles } from "./modal.styles";
-import { DialogTitleProps, ModalProps } from "./interfaces/modal.interfaces";
+import {
+  DialogTitleProps,
+  ModalProps,
+  ModalType,
+} from "./interfaces/modal.interfaces";
+import { useSelector } from "../../store/store";
+import { FilterType, ITodo } from "../../models/todo.model";
+import { getTextForType } from "../utils";
 
 const DialogTitle1 = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
@@ -31,26 +39,28 @@ const DialogTitle1 = (props: DialogTitleProps) => {
   );
 };
 
-export const Modal: FC<
-  ModalProps & {
-    isOpen: boolean;
-    setOpen: (state: boolean) => void;
-    handleClose: () => void;
-  }
-> = ({
+export const Modal: FC<ModalProps> = ({
   isOpen,
   handleClose,
-  firstButton,
-  secondButton,
-  content,
-  setOpen,
-  headerText,
+  type,
+  handleDelete,
+  handleEdit,
 }) => {
   const s = useStyles();
+  const tmpTodo = useSelector((state) => state.todo.tmpTodo);
+  const [todo, setTodo] = useState<ITodo | null>(null);
+  useEffect(() => {
+    if (!tmpTodo) return;
+    setTodo(tmpTodo);
+  }, [tmpTodo]);
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const editTodoHandler: React.ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => {
+    if (todo !== null && target.value.trim() !== " ") {
+      setTodo({ ...todo, text: target.value });
+    }
+  };
 
   return (
     <Dialog
@@ -59,35 +69,56 @@ export const Modal: FC<
       open={isOpen}
     >
       <DialogTitle1 id="customized-dialog-title" onClose={handleClose}>
-        {headerText}
+        {getTextForType(type)}
       </DialogTitle1>
       <DialogContent className={s.dialogContent} dividers>
-        {typeof content !== "string" ? (
-          content
+        {type !== ModalType.Edit ? (
+          <Typography gutterBottom>
+            {"if you do this you won't be able to revert the changes"}
+          </Typography>
         ) : (
-          <Typography gutterBottom>{content}</Typography>
+          <TextField
+            label={"Edit"}
+            onChange={editTodoHandler}
+            value={todo?.text}
+          />
         )}
       </DialogContent>
       <DialogActions className={s.dialogActions}>
-        {firstButton && (
-          <Button
-            variant="contained"
-            onClick={firstButton.buttonHandler}
-            color="primary"
-          >
-            {firstButton.buttonText}
-          </Button>
-        )}
-        {secondButton && (
-          <Button
-            autoFocus
-            variant="contained"
-            onClick={secondButton.buttonHandler}
-            color="primary"
-          >
-            {secondButton.buttonText}
-          </Button>
-        )}
+        <Button variant="contained" onClick={handleClose} color="primary">
+          {"Cancel"}
+        </Button>
+
+        <Button
+          autoFocus
+          variant="contained"
+          onClick={() => {
+            switch (type) {
+              case ModalType.Delete: {
+                handleDelete(tmpTodo?.id!);
+                break;
+              }
+              case ModalType.DeleteAll: {
+                handleDelete(FilterType.ALL);
+                break;
+              }
+              case ModalType.DeleteChecked: {
+                handleDelete(FilterType.DONE);
+                break;
+              }
+              case ModalType.Edit: {
+                handleEdit(todo!);
+                break;
+              }
+              default:
+                handleClose();
+                break;
+            }
+          }}
+          color="primary"
+        >
+          {"Apply"}
+        </Button>
       </DialogActions>
     </Dialog>
   );

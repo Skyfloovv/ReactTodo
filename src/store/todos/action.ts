@@ -1,80 +1,135 @@
-import { ThunkAction } from "redux-thunk";
-import { getTodos } from "../../service/todo.service";
-import { ITodo } from "../../models/todo.model";
+// Thunk//////////////////////////////////
+// import { ThunkAction } from "redux-thunk";
+// import { getTodos } from "../../service/todo.service";
+///////////////////////////////////////////////
+import { FilterType, ITodo } from "../../models/todo.model";
 import { Actions } from "./constant";
 import {
-  AddTodoAction,
+  AddTodoRequestAction,
+  AddTodoSuccessAction,
+  CheckTodoAction,
+  DeleteAllTodoAction,
+  DeleteCheckTodoAction,
+  DeleteTodoAction,
+  EditTodoAction,
+  FilterTodosAction,
+  SearchTodosAction,
+  SetFilterTodosAction,
   SetIsLoadingAction,
-  SetTodosAction,
+  SetTmpTodoAction,
+  // Thunk////////////////////
+  //SetTodosAction,
+  ////////////////////////////
 } from "./action.types";
 
-// * Thunk
-const loadTodosThunk =
-  (): ThunkAction<
-    Promise<void>,
-    any,
-    undefined,
-    SetTodosAction | SetIsLoadingAction
-  > =>
-  async (dispatch, getState) => {
-    try {
-      const res = await getTodos();
-      dispatch(isLoading(false));
-      dispatch({ type: Actions.SetTodos, payload: { todos: res } });
-    } catch (e) {
-      console.log(e);
-    }
+// // * Thunk////////////////////////////////////////////////////////////////
+// const loadTodosThunk =
+//   (): ThunkAction<
+//     Promise<void>,
+//     any,
+//     undefined,
+//     SetTodosAction | SetIsLoadingAction | FilterTodosAction
+//   > =>
+//   async (dispatch, getState) => {
+//     try {
+//       const res = await getTodos();
+//       dispatch(isLoading(false));
+//       dispatch({ type: Actions.SetTodos, payload: { todos: res } });
+//       dispatch(TodoAction.filterTodos(FilterType.ALL));
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   };
+//////////////////////////////////////////////////////////////////////////////
+const addTodoRequest = (text: string): AddTodoRequestAction => {
+  return {
+    type: Actions.AddTodo_Request,
+    payload: text,
   };
+};
+const addTodoSuccess = (text: string): AddTodoSuccessAction => {
+  return {
+    type: Actions.AddTodo_Success,
+    payload: text,
+  };
+};
+const deleteAllTodo = (): DeleteAllTodoAction => {
+  return {
+    type: Actions.DeleteAllTodo,
+  };
+};
+const editTodo = (todo: ITodo): EditTodoAction => {
+  return {
+    type: Actions.EditTodo,
+    payload: todo,
+  };
+};
+const deleteCheckTodo = (): DeleteCheckTodoAction => {
+  return {
+    type: Actions.DeleteCheckTodo,
+  };
+};
+const setTmpTodo = (tmpTodo: ITodo): SetTmpTodoAction => {
+  return {
+    type: Actions.SetTmpTodo,
+    payload: { tmpTodo },
+  };
+};
+const checkTodo = (id: string | number): CheckTodoAction => {
+  return {
+    type: Actions.CheckTodo,
+    payload: id,
+  };
+};
+const deleteTodo = (id: string | number): DeleteTodoAction => {
+  return {
+    type: Actions.DeleteTodo,
+    payload: id,
+  };
+};
 const isLoading = (isLoading: boolean): SetIsLoadingAction => {
   return {
     type: Actions.SetIsLoading,
     payload: { isLoading: isLoading },
   };
 };
-
-const addTodo = (text: string): AddTodoAction => {
+const searchTodos = (searchText: string): SearchTodosAction => {
   return {
-    type: Actions.AddTodo,
-    payload: text,
+    type: Actions.SearchTodos,
+    payload: { searchText },
   };
 };
-
-const editTodo = (todo: ITodo): any => {
+const setFilterTodos = (todos: ITodo[]): SetFilterTodosAction => {
   return {
-    type: Actions.EditTodo,
-    payload: todo,
+    type: Actions.SetFilterTodos,
+    payload: {
+      filterTodo: todos,
+    },
   };
 };
-const checkTodo = (id: string | number): any => {
+const filterTodos = (filterType: FilterType): FilterTodosAction => {
   return {
-    type: Actions.CheckTodo,
-    payload: id,
-  };
-};
-const deleteTodo = (id: string | number): any => {
-  return {
-    type: Actions.DeleteTodo,
-    payload: id,
-  };
-};
-const deleteAllTodo = (): any => {
-  return {
-    type: Actions.DeleteAllTodo,
-  };
-};
-const deleteCheckTodo = (): any => {
-  return {
-    type: Actions.DeleteCheckTodo,
+    type: Actions.FilterTodos,
+    payload: {
+      filterType,
+    },
   };
 };
 
 export const TodoAction = {
-  addTodo,
+  // addTodo,
   editTodo,
   checkTodo,
   isLoading,
+  setTmpTodo,
   deleteTodo,
+  filterTodos,
+  searchTodos,
   deleteAllTodo,
-  loadTodosThunk,
+  addTodoRequest,
+  addTodoSuccess,
+  // Thunk
+  // loadTodosThunk,
+  setFilterTodos,
   deleteCheckTodo,
 };

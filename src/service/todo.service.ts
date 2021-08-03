@@ -24,7 +24,7 @@ export const getTodos = (): Promise<ITodo[]> => {
     },
   ];
 
-  return new Promise((resolve, reject) => {
+  return new Promise<ITodo[]>((resolve, reject) => {
     setTimeout(() => {
       resolve(todos);
     }, 1000);

@@ -1,17 +1,22 @@
+import { FilterType, ITodo } from "../../../models/todo.model";
+
 export interface ModalProps {
-  headerText: string;
-  content?: string | JSX.Element;
-  firstButton: {
-    buttonText: string;
-    buttonHandler: () => void;
-  } | null;
-  secondButton: {
-    buttonText: string;
-    buttonHandler: () => void;
-  } | null;
+  type: ModalType | undefined;
+  isOpen: boolean;
+  handleClose: () => void;
+  handleDelete: (typeOrId: FilterType | number) => void;
+  handleEdit: (todo: ITodo) => void;
 }
+
 export interface DialogTitleProps {
   id: string;
   children: React.ReactNode;
   onClose: () => void;
+}
+
+export enum ModalType {
+  Delete = "delete",
+  DeleteAll = "deleteAll",
+  DeleteChecked = "deleteChecked",
+  Edit = "edit",
 }

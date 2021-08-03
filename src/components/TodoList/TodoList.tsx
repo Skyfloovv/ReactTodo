@@ -1,14 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import "./TodoList.scss";
-import {
-  Backdrop,
-  CircularProgress,
-  List,
-  ListItem,
-  TextField,
-} from "@material-ui/core";
-import { filterTodoForType } from "../../service/todo.service";
-import { Modal, ModalProps } from "../Modal";
+import { Backdrop, CircularProgress, List, ListItem } from "@material-ui/core";
+import { Modal, ModalType } from "../Modal";
 import { useDebounce } from "../../hooks/debounce";
 import {
   Todo,
@@ -17,15 +10,17 @@ import {
   TodoListHeaderAction,
 } from "./";
 import { useModal } from "../../hooks/useModal";
-import { getModalPropsForDeleteTask } from "../utils";
 import { FilterType, ITodo } from "../../models/todo.model";
 import { TodoAction } from "../../store/todos/action";
-import { StateType, useDispatch, useSelector } from "../../store/store";
-import { ThunkDispatch } from "redux-thunk";
+import { useDispatch, useSelector } from "../../store/store";
+//Thunk/////////////////////////////////////
+//import { StateType, useDispatch, useSelector } from "../../store/store";
+//import { ThunkDispatch } from "redux-thunk";
+/////////////////////////////////////////////
+import { Actions } from "../../store/todos/constant";
 
 const TodoList: FC<any> = () => {
-  const [filterTodos, setFilterTodos] = useState<ITodo[]>([]);
-  const [todo, setTodo] = useState<ITodo | null>(null);
+  const [modalType, setModalType] = useState<ModalType>();
   const [newTodo, setNewTodo] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const {
@@ -33,139 +28,116 @@ const TodoList: FC<any> = () => {
     setModalOpen: setOpenConfirmModal,
     toggle: ConfirmModalToggle,
   } = useModal();
-  const [modalOption, setModalOption] = useState<ModalProps>();
   const debouncedSearchTerm: string = useDebounce<string>(search, 500);
 
   const todos = useSelector((state) => state.todo.todos);
+  const filterTodos = useSelector((state) => state.todo.filterTodos);
   const isLoading = useSelector((state) => state.todo.isLoading);
-  const ThunkDispatch: ThunkDispatch<
-    StateType,
-    undefined,
-    { type: string; payload?: any }
-  > = useDispatch();
+  //Thunk/////////////////////////////
+  // const ThunkDispatch: ThunkDispatch<
+  //   StateType,
+  //   undefined,
+  //   { type: string; payload?: any }
+  // > = useDispatch();
+  ////////////////////////////
   const dispatch = useDispatch();
   const modalClose = () => {
     ConfirmModalToggle();
-    setModalOption(undefined);
-    setTodo(null);
   };
-
+  //Thunk////////////////////////////////
+  // useEffect(() => {
+  //   // ThunkDispatch(TodoAction.loadTodosThunk());
+  // }, [ThunkDispatch]);
+  ///////////////////////////////////////
   useEffect(() => {
-    ThunkDispatch(TodoAction.loadTodosThunk());
-  }, [ThunkDispatch]);
-
+    dispatch({ type: Actions.LoadTodos });
+  }, []);
   useEffect(() => {
-    filter(FilterType.ALL);
+    if (!todos) return;
+    dispatch(TodoAction.setFilterTodos(todos));
   }, [todos]);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
-      setFilterTodos(
-        todos.filter((item) => {
-          return item.text.includes(debouncedSearchTerm);
-        })
-      );
+      dispatch(TodoAction.searchTodos(debouncedSearchTerm));
     } else {
-      setFilterTodos(todos);
+      dispatch(TodoAction.filterTodos(FilterType.ALL));
     }
-  }, [debouncedSearchTerm, todos]);
-
-  useEffect(() => {
-    if (!todo) return;
-    setModalOption({
-      content: (
-        <TextField
-          label={"Edit"}
-          onChange={editTodoHandler}
-          value={todo?.text}
-        />
-      ),
-      headerText: "Edit Todo",
-      firstButton: {
-        buttonText: "Cancel",
-        buttonHandler: modalClose,
-      },
-      secondButton: {
-        buttonText: "Apply",
-        buttonHandler: saveEditTodo,
-      },
-    });
-    if (!modalOption) ConfirmModalToggle();
-  }, [todo]);
+  }, [debouncedSearchTerm]);
 
   const createNewTodo: React.ChangeEventHandler<HTMLInputElement> = ({
     target,
-  }) => {
-    if (!todo && target.value !== " ") {
+  }): void => {
+    if (target.value !== " ") {
       setNewTodo(target.value);
     }
   };
-  const saveChanges = () => {
+  const saveChanges = (): void => {
     if (newTodo) {
-      dispatch(TodoAction.addTodo(newTodo));
+      dispatch(TodoAction.addTodoRequest(newTodo));
       setNewTodo("");
     }
   };
-  const saveEditTodo = () => {
+  const saveEditTodo = (todo: ITodo): void => {
     if (todo !== null) {
       dispatch(TodoAction.editTodo(todo));
-      setTodo(null);
       modalClose();
     }
   };
-  const editTodoHandler: React.ChangeEventHandler<HTMLInputElement> = ({
-    target,
-  }) => {
-    if (todo !== null && target.value.trim() !== "") {
-      setTodo({ ...todo, text: target.value });
-    }
-  };
 
-  const OnChecked = (id: number) => {
+  const OnChecked = (id: number): void => {
     dispatch(TodoAction.checkTodo(id));
   };
 
-  const editTodo = (id: number) => {
+  const editTodo = (id: number): void => {
     const changesTodo = todos.find((item) => item.id === id);
+
     if (changesTodo) {
-      setTodo(changesTodo);
+      dispatch(TodoAction.setTmpTodo(changesTodo));
+      setModalType(ModalType.Edit);
+      ConfirmModalToggle();
     }
   };
-  const filter = (filter: FilterType) => {
-    const new_arr = filterTodoForType(filter, todos);
-    setFilterTodos(new_arr);
+  const filter = (filter: FilterType): void => {
+    dispatch(TodoAction.filterTodos(filter));
   };
   const searchTodo: React.ChangeEventHandler<HTMLInputElement> = ({
     target,
   }) => {
     setSearch(target.value);
   };
-  const openModalForDelete = (typeOrId: FilterType | number) => {
+  const openModalForDelete = (typeOrId: FilterType | number): void => {
     if (typeof typeOrId === "number") {
-      setModalOption(
-        getModalPropsForDeleteTask({
-          id: typeOrId,
-          handleClose: modalClose,
-          deleteHandler: deleteTodo,
-        })
-      );
+      const deleteTodo = todos.find((item) => item.id === typeOrId);
+      dispatch(TodoAction.setTmpTodo(deleteTodo!));
+      setModalType(ModalType.Delete);
       ConfirmModalToggle();
     } else {
-      setModalOption(
-        getModalPropsForDeleteTask({
-          deleteType: typeOrId,
-          handleClose: modalClose,
-          deleteHandler: deleteTasks,
-        })
-      );
+      switch (typeOrId) {
+        case FilterType.ALL: {
+          setModalType(ModalType.DeleteAll);
+          break;
+        }
+        case FilterType.DONE: {
+          setModalType(ModalType.DeleteChecked);
+          break;
+        }
+      }
       ConfirmModalToggle();
     }
   };
-  const deleteTodo = (id: number) => {
+  const deleteTask = (typeOrId: FilterType | number): void => {
+    if (typeof typeOrId === "number") {
+      deleteTodo(typeOrId);
+    } else {
+      deleteTasks(typeOrId);
+    }
+  };
+  const deleteTodo = (id: number): void => {
     dispatch(TodoAction.deleteTodo(id));
     modalClose();
   };
-  const deleteTasks = (deleteType: FilterType) => {
+  const deleteTasks = (deleteType: FilterType): void => {
     switch (deleteType) {
       case FilterType.ALL: {
         dispatch(TodoAction.deleteAllTodo());
@@ -222,8 +194,9 @@ const TodoList: FC<any> = () => {
       </List>
       <TodoListFooterAction deleteTasks={openModalForDelete} />
       <Modal
-        {...modalOption!}
-        setOpen={setOpenConfirmModal}
+        type={modalType}
+        handleEdit={saveEditTodo}
+        handleDelete={deleteTask}
         isOpen={openConfirmModal}
         handleClose={modalClose}
       />
