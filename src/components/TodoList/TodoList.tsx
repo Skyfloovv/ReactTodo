@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "../../store/store";
 //import { ThunkDispatch } from "redux-thunk";
 /////////////////////////////////////////////
 import { Actions } from "../../store/todos/constant";
+import { Link } from "react-router-dom";
 
 const TodoList: FC<any> = () => {
   const [modalType, setModalType] = useState<ModalType>();
@@ -80,17 +81,17 @@ const TodoList: FC<any> = () => {
   };
   const saveEditTodo = (todo: ITodo): void => {
     if (todo !== null) {
-      dispatch(TodoAction.editTodo(todo));
+      dispatch(TodoAction.editTodoRequest(todo));
       modalClose();
     }
   };
 
-  const OnChecked = (id: number): void => {
-    dispatch(TodoAction.checkTodo(id));
+  const OnChecked = (todo: ITodo): void => {
+    dispatch(TodoAction.checkTodoRequest(todo));
   };
 
-  const editTodo = (id: number): void => {
-    const changesTodo = todos.find((item) => item.id === id);
+  const editTodo = (id: string): void => {
+    const changesTodo = todos.find((item) => item._id === id);
 
     if (changesTodo) {
       dispatch(TodoAction.setTmpTodo(changesTodo));
@@ -106,9 +107,10 @@ const TodoList: FC<any> = () => {
   }) => {
     setSearch(target.value);
   };
-  const openModalForDelete = (typeOrId: FilterType | number): void => {
-    if (typeof typeOrId === "number") {
-      const deleteTodo = todos.find((item) => item.id === typeOrId);
+  const openModalForDelete = (typeOrId: FilterType | string): void => {
+    console.log(typeOrId);
+    if (typeof typeOrId === "string") {
+      const deleteTodo = todos.find((item) => item._id === typeOrId);
       dispatch(TodoAction.setTmpTodo(deleteTodo!));
       setModalType(ModalType.Delete);
       ConfirmModalToggle();
@@ -126,25 +128,25 @@ const TodoList: FC<any> = () => {
       ConfirmModalToggle();
     }
   };
-  const deleteTask = (typeOrId: FilterType | number): void => {
-    if (typeof typeOrId === "number") {
+  const deleteTask = (typeOrId: FilterType | string): void => {
+    if (typeof typeOrId === "string") {
       deleteTodo(typeOrId);
     } else {
       deleteTasks(typeOrId);
     }
   };
-  const deleteTodo = (id: number): void => {
-    dispatch(TodoAction.deleteTodo(id));
+  const deleteTodo = (id: string): void => {
+    dispatch(TodoAction.deleteTodoRequest(id));
     modalClose();
   };
   const deleteTasks = (deleteType: FilterType): void => {
     switch (deleteType) {
       case FilterType.ALL: {
-        dispatch(TodoAction.deleteAllTodo());
+        dispatch(TodoAction.deleteAllTodoRequest());
         break;
       }
       case FilterType.DONE: {
-        dispatch(TodoAction.deleteCheckTodo());
+        dispatch(TodoAction.deleteCheckTodoRequest());
         break;
       }
       default:
@@ -154,6 +156,7 @@ const TodoList: FC<any> = () => {
   };
   return (
     <div className="TodoListContainer">
+      {/*<Link to="/about">Link to about</Link>*/}
       <TodoInput
         newTodo={createNewTodo}
         todo={newTodo}

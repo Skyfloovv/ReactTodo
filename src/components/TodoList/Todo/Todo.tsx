@@ -5,7 +5,7 @@ import "./Todo.scss";
 import { ITodoProps } from "../../../models/todo.model";
 
 export const Todo: FC<ITodoProps> = ({
-  id,
+  _id,
   checked,
   text,
   deleteTodo,
@@ -16,9 +16,12 @@ export const Todo: FC<ITodoProps> = ({
     <div className="Todo">
       <span className={checked ? "strike" : ""}>{text}</span>
       <div className="todo-actions">
-        <Checkbox checked={checked} onChange={() => OnChecked(id)} />
-        <Button children={"edit"} onClick={() => editTodo(id)} />
-        <Button children={"delete"} onClick={() => deleteTodo(id)} />
+        <Checkbox
+          checked={checked}
+          onChange={() => OnChecked({ _id, checked, text })}
+        />
+        <Button children={"edit"} onClick={() => editTodo(_id)} />
+        <Button children={"delete"} onClick={() => deleteTodo(_id)} />
       </div>
     </div>
   );

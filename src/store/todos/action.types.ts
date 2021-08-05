@@ -9,48 +9,79 @@ export interface AddTodoRequestAction
 }
 export interface AddTodoSuccessAction
   extends Action<typeof Actions.AddTodo_Success> {
-  payload: string;
+  payload: ITodo;
 }
+
 export interface SetTodosAction extends Action<typeof Actions.SetTodos> {
   payload: {
     todos: ITodo[];
   };
 }
-export interface EditTodoAction extends Action<typeof Actions.EditTodo> {
+
+export interface EditTodoRequestAction
+  extends Action<typeof Actions.EditTodo_Request> {
   payload: ITodo;
 }
-export interface CheckTodoAction extends Action<typeof Actions.CheckTodo> {
-  payload: number | string;
+export interface EditTodoSuccessAction
+  extends Action<typeof Actions.EditTodo_Success> {
+  payload: ITodo;
 }
+
+export interface CheckTodoRequestAction
+  extends Action<typeof Actions.CheckTodo_Request> {
+  payload: ITodo;
+}
+export interface CheckTodoSuccessAction
+  extends Action<typeof Actions.CheckTodo_Success> {
+  payload: ITodo;
+}
+
 export interface LoadTodosAction extends Action<typeof Actions.LoadTodos> {}
+
 export interface SetTmpTodoAction extends Action<typeof Actions.SetTmpTodo> {
   payload: {
     tmpTodo: ITodo;
   };
 }
-export interface DeleteTodoAction extends Action<typeof Actions.DeleteTodo> {
+
+export interface DeleteTodoRequestAction
+  extends Action<typeof Actions.DeleteTodo_Request> {
   payload: number | string;
 }
+export interface DeleteTodoSuccessAction
+  extends Action<typeof Actions.DeleteTodo_Success> {
+  payload: number | string;
+}
+
 export interface FilterTodosAction extends Action<typeof Actions.FilterTodos> {
   payload: {
     filterType: FilterType;
   };
 }
+
 export interface SearchTodosAction extends Action<typeof Actions.SearchTodos> {
   payload: {
     searchText: string;
   };
 }
-export interface DeleteAllTodoAction
-  extends Action<typeof Actions.DeleteAllTodo> {}
+
+export interface DeleteAllTodoRequestAction
+  extends Action<typeof Actions.DeleteAllTodo_Request> {}
+export interface DeleteAllTodoSuccessAction
+  extends Action<typeof Actions.DeleteAllTodo_Success> {}
+
 export interface SetIsLoadingAction
   extends Action<typeof Actions.SetIsLoading> {
   payload: {
     isLoading: boolean;
   };
 }
-export interface DeleteCheckTodoAction
-  extends Action<typeof Actions.DeleteCheckTodo> {}
+
+export interface DeleteCheckTodoRequestAction
+  extends Action<typeof Actions.DeleteCheckTodo_Request> {}
+export interface DeleteCheckTodoSuccessAction
+  extends Action<typeof Actions.DeleteCheckTodo_Success> {}
+
 export interface SetFilterTodosAction
   extends Action<typeof Actions.SetFilterTodos> {
   payload: {
@@ -59,17 +90,22 @@ export interface SetFilterTodosAction
 }
 
 export type ReducerActionType =
-  | EditTodoAction
+  | EditTodoRequestAction
+  | EditTodoSuccessAction
   | SetTodosAction
   | LoadTodosAction
-  | CheckTodoAction
+  | CheckTodoRequestAction
+  | CheckTodoSuccessAction
   | SetTmpTodoAction
-  | DeleteTodoAction
+  | DeleteTodoRequestAction
+  | DeleteTodoSuccessAction
   | FilterTodosAction
   | SearchTodosAction
   | SetIsLoadingAction
-  | DeleteAllTodoAction
+  | DeleteAllTodoRequestAction
+  | DeleteAllTodoSuccessAction
   | AddTodoRequestAction
   | AddTodoSuccessAction
   | SetFilterTodosAction
-  | DeleteCheckTodoAction;
+  | DeleteCheckTodoRequestAction
+  | DeleteCheckTodoSuccessAction;

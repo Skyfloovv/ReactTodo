@@ -28,18 +28,16 @@ export const todosReducer = (
         todos: [
           ...state.todos,
           {
-            id: state.todos.length + 1,
-            checked: false,
-            text: action.payload,
+            ...action.payload,
           },
         ],
       };
     }
-    case Actions.EditTodo: {
+    case Actions.EditTodo_Success: {
       return {
         ...state,
         todos: state.todos.map((item) => {
-          if (item.id === action.payload.id) {
+          if (item._id === action.payload._id) {
             return action.payload;
           }
           return item;
@@ -55,15 +53,14 @@ export const todosReducer = (
     case Actions.LoadTodos: {
       return state;
     }
-    case Actions.CheckTodo: {
+    case Actions.CheckTodo_Success: {
       return {
         ...state,
         todos: state.todos.map((item) => {
-          if (item.id === action.payload) {
-            item.checked = !item.checked;
-            return item;
+          if (item._id === action.payload._id) {
+            return { ...action.payload };
           }
-          return item;
+          return { ...item };
         }),
       };
     }
@@ -73,10 +70,10 @@ export const todosReducer = (
         tmpTodo: action.payload.tmpTodo,
       };
     }
-    case Actions.DeleteTodo: {
+    case Actions.DeleteTodo_Success: {
       return {
         ...state,
-        todos: state.todos.filter((item) => item.id !== action.payload),
+        todos: state.todos.filter((item) => item._id !== action.payload),
       };
     }
     case Actions.FilterTodos: {
@@ -99,7 +96,7 @@ export const todosReducer = (
         isLoading: action.payload.isLoading,
       };
     }
-    case Actions.DeleteAllTodo: {
+    case Actions.DeleteAllTodo_Success: {
       return {
         ...state,
         todos: [],
@@ -111,7 +108,7 @@ export const todosReducer = (
         filterTodos: action.payload.filterTodo,
       };
     }
-    case Actions.DeleteCheckTodo: {
+    case Actions.DeleteCheckTodo_Success: {
       return {
         ...state,
         todos: state.todos.filter((item) => !item.checked),

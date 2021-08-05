@@ -4,7 +4,7 @@ export interface ModalProps {
   type: ModalType | undefined;
   isOpen: boolean;
   handleClose: () => void;
-  handleDelete: (typeOrId: FilterType | number) => void;
+  handleDelete: (typeOrId: FilterType | string) => void;
   handleEdit: (todo: ITodo) => void;
 }
 

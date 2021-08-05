@@ -95,7 +95,7 @@ export const Modal: FC<ModalProps> = ({
           onClick={() => {
             switch (type) {
               case ModalType.Delete: {
-                handleDelete(tmpTodo?.id!);
+                handleDelete(tmpTodo?._id!);
                 break;
               }
               case ModalType.DeleteAll: {

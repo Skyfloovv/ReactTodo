@@ -2,9 +2,9 @@ import React from "react";
 
 export interface ITodoListProps {
   todos: ITodo[];
-  OnChecked: (id: number) => void;
-  editTodo: (id: number) => void;
-  deleteTodo: (id: number) => void;
+  OnChecked: (id: string) => void;
+  editTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
   filter: (filter: FilterType) => void;
   deleteTasks: (filter: FilterType) => void;
 }
@@ -19,16 +19,16 @@ export interface TodoEditModalProps {
   todo: string | undefined;
 }
 export interface ITodoProps extends ITodo {
-  deleteTodo: (id: number) => void;
-  editTodo: (id: number) => void;
-  OnChecked: (id: number) => void;
+  deleteTodo: (id: string) => void;
+  editTodo: (id: string) => void;
+  OnChecked: (id: ITodo) => void;
 }
 export interface TodoListHeaderActionProps {
   searchTodo: React.ChangeEventHandler<HTMLInputElement>;
   filter: (filter: FilterType) => void;
 }
 export interface ITodo {
-  id: number;
+  _id: string;
   checked: boolean;
   text: string;
 }

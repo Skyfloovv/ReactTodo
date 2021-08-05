@@ -7,19 +7,21 @@ import { Actions } from "./constant";
 import {
   AddTodoRequestAction,
   AddTodoSuccessAction,
-  CheckTodoAction,
-  DeleteAllTodoAction,
-  DeleteCheckTodoAction,
-  DeleteTodoAction,
-  EditTodoAction,
+  CheckTodoRequestAction,
+  CheckTodoSuccessAction,
+  DeleteAllTodoRequestAction,
+  DeleteAllTodoSuccessAction,
+  DeleteCheckTodoRequestAction,
+  DeleteCheckTodoSuccessAction,
+  DeleteTodoRequestAction,
+  DeleteTodoSuccessAction,
+  EditTodoRequestAction,
+  EditTodoSuccessAction,
   FilterTodosAction,
   SearchTodosAction,
   SetFilterTodosAction,
   SetIsLoadingAction,
   SetTmpTodoAction,
-  // Thunk////////////////////
-  //SetTodosAction,
-  ////////////////////////////
 } from "./action.types";
 
 // // * Thunk////////////////////////////////////////////////////////////////
@@ -47,26 +49,42 @@ const addTodoRequest = (text: string): AddTodoRequestAction => {
     payload: text,
   };
 };
-const addTodoSuccess = (text: string): AddTodoSuccessAction => {
+const addTodoSuccess = (todo: ITodo): AddTodoSuccessAction => {
   return {
     type: Actions.AddTodo_Success,
-    payload: text,
-  };
-};
-const deleteAllTodo = (): DeleteAllTodoAction => {
-  return {
-    type: Actions.DeleteAllTodo,
-  };
-};
-const editTodo = (todo: ITodo): EditTodoAction => {
-  return {
-    type: Actions.EditTodo,
     payload: todo,
   };
 };
-const deleteCheckTodo = (): DeleteCheckTodoAction => {
+const deleteAllTodoRequest = (): DeleteAllTodoRequestAction => {
   return {
-    type: Actions.DeleteCheckTodo,
+    type: Actions.DeleteAllTodo_Request,
+  };
+};
+const deleteAllTodoSuccess = (): DeleteAllTodoSuccessAction => {
+  return {
+    type: Actions.DeleteAllTodo_Success,
+  };
+};
+const editTodoRequest = (todo: ITodo): EditTodoRequestAction => {
+  return {
+    type: Actions.EditTodo_Request,
+    payload: todo,
+  };
+};
+const editTodoSuccess = (todo: ITodo): EditTodoSuccessAction => {
+  return {
+    type: Actions.EditTodo_Success,
+    payload: todo,
+  };
+};
+const deleteCheckTodoRequest = (): DeleteCheckTodoRequestAction => {
+  return {
+    type: Actions.DeleteCheckTodo_Request,
+  };
+};
+const deleteCheckTodoSuccess = (): DeleteCheckTodoSuccessAction => {
+  return {
+    type: Actions.DeleteCheckTodo_Success,
   };
 };
 const setTmpTodo = (tmpTodo: ITodo): SetTmpTodoAction => {
@@ -75,15 +93,27 @@ const setTmpTodo = (tmpTodo: ITodo): SetTmpTodoAction => {
     payload: { tmpTodo },
   };
 };
-const checkTodo = (id: string | number): CheckTodoAction => {
+const checkTodoRequest = (todo: ITodo): CheckTodoRequestAction => {
   return {
-    type: Actions.CheckTodo,
+    type: Actions.CheckTodo_Request,
+    payload: todo,
+  };
+};
+const checkTodoSuccess = (todo: ITodo): CheckTodoSuccessAction => {
+  return {
+    type: Actions.CheckTodo_Success,
+    payload: todo,
+  };
+};
+const deleteTodoRequest = (id: string | number): DeleteTodoRequestAction => {
+  return {
+    type: Actions.DeleteTodo_Request,
     payload: id,
   };
 };
-const deleteTodo = (id: string | number): DeleteTodoAction => {
+const deleteTodoSuccess = (id: string | number): DeleteTodoSuccessAction => {
   return {
-    type: Actions.DeleteTodo,
+    type: Actions.DeleteTodo_Success,
     payload: id,
   };
 };
@@ -117,19 +147,21 @@ const filterTodos = (filterType: FilterType): FilterTodosAction => {
 };
 
 export const TodoAction = {
-  // addTodo,
-  editTodo,
-  checkTodo,
   isLoading,
   setTmpTodo,
-  deleteTodo,
   filterTodos,
   searchTodos,
-  deleteAllTodo,
+  setFilterTodos,
   addTodoRequest,
   addTodoSuccess,
-  // Thunk
-  // loadTodosThunk,
-  setFilterTodos,
-  deleteCheckTodo,
+  editTodoRequest,
+  editTodoSuccess,
+  checkTodoRequest,
+  checkTodoSuccess,
+  deleteTodoRequest,
+  deleteTodoSuccess,
+  deleteAllTodoRequest,
+  deleteAllTodoSuccess,
+  deleteCheckTodoRequest,
+  deleteCheckTodoSuccess,
 };
