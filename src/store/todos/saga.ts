@@ -35,7 +35,7 @@ function* addTodo(action: AddTodoRequestAction): any {
 
 function* removeTodo(action: DeleteTodoRequestAction): any {
   try {
-    const { data } = yield call(todoApi.removeTodo, action.payload);
+    yield call(todoApi.removeTodo, action.payload);
     yield put(TodoAction.deleteTodoSuccess(action.payload));
   } catch (e) {
     console.log(e);
@@ -44,6 +44,8 @@ function* removeTodo(action: DeleteTodoRequestAction): any {
 
 function* removeTodos(action: DeleteAllTodoRequestAction): any {
   try {
+    console.log("All todo");
+    yield call(todoApi.removeTodos, FilterType.ALL);
     yield put(TodoAction.deleteAllTodoSuccess());
   } catch (e) {
     console.log(e);
@@ -52,8 +54,8 @@ function* removeTodos(action: DeleteAllTodoRequestAction): any {
 
 function* editTodo(action: EditTodoRequestAction): any {
   try {
-    const { data } = yield call(todoApi.updateTodo, action.payload);
-    yield put(TodoAction.editTodoSuccess(data));
+    yield call(todoApi.updateTodo, action.payload);
+    yield put(TodoAction.editTodoSuccess(action.payload));
   } catch (e) {
     console.log(e);
   }
@@ -61,6 +63,8 @@ function* editTodo(action: EditTodoRequestAction): any {
 
 function* removeCheckTodos(action: DeleteCheckTodoRequestAction): any {
   try {
+    console.log("Done todo");
+    yield call(todoApi.removeTodos, FilterType.DONE);
     yield put(TodoAction.deleteCheckTodoSuccess());
   } catch (e) {
     console.log(e);
@@ -69,7 +73,7 @@ function* removeCheckTodos(action: DeleteCheckTodoRequestAction): any {
 
 function* checkTodo(action: CheckTodoRequestAction): any {
   try {
-    const { data } = yield call(todoApi.updateTodo, action.payload);
+    yield call(todoApi.updateTodo, action.payload);
     yield put(TodoAction.checkTodoSuccess(action.payload));
   } catch (e) {
     console.log(e);
@@ -98,7 +102,7 @@ export function* watchCheckTodo() {
   yield takeLatest(Actions.CheckTodo_Request, checkTodo);
 }
 
-export function* metafieldsSaga() {
+export function* metaFieldsSaga() {
   yield all([
     watchGetListTodo(),
     watchAddTodo(),

@@ -1,5 +1,4 @@
 import { FilterType, ITodo } from "../models/todo.model";
-import { todoApi } from "../api";
 
 // export const getTodos = (): Promise<ITodo[]> => {
 //   const todos: ITodo[] = [
@@ -21,7 +20,7 @@ import { todoApi } from "../api";
 //     {
 //       _id: 4,
 //       checked: false,
-//       text: "build home",
+//       text: "build house",
 //     },
 //   ];
 //
@@ -44,21 +43,6 @@ export const filterTodoForType = (
       return todos.filter((item) => item.checked);
     }
     case FilterType.TODO: {
-      return todos.filter((item) => !item.checked);
-    }
-    default:
-      return todos;
-  }
-};
-export const deleteTodoForType = (
-  deleteType: FilterType,
-  todos: ITodo[]
-): ITodo[] | [] => {
-  switch (deleteType) {
-    case FilterType.ALL: {
-      return [];
-    }
-    case FilterType.DONE: {
       return todos.filter((item) => !item.checked);
     }
     default:

@@ -89,7 +89,7 @@ export interface SetFilterTodosAction
   };
 }
 
-export type ReducerActionType =
+export type ReducerTodoActionType =
   | EditTodoRequestAction
   | EditTodoSuccessAction
   | SetTodosAction

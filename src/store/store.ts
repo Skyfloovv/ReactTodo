@@ -10,7 +10,7 @@ import {
   useSelector as useReduxSelector,
 } from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import { metafieldsSaga } from "./todos/saga";
+import { metaFieldsSaga } from "./todos/saga";
 const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -25,7 +25,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 export function* rootSaga() {
-  yield all([fork(metafieldsSaga)]);
+  yield all([fork(metaFieldsSaga)]);
 }
 
 sagaMiddleware.run(rootSaga);

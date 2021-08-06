@@ -1,6 +1,6 @@
 import { ITodo } from "../../models/todo.model";
 import { Actions } from "./constant";
-import { ReducerActionType } from "./action.types";
+import { ReducerTodoActionType } from "./action.types";
 import { filterTodoForType } from "../../service/todo.service";
 
 export interface IinitialState {
@@ -19,7 +19,7 @@ const initialState: IinitialState = {
 
 export const todosReducer = (
   state: IinitialState = initialState,
-  action: ReducerActionType
+  action: ReducerTodoActionType
 ): IinitialState => {
   switch (action.type) {
     case Actions.AddTodo_Success: {
