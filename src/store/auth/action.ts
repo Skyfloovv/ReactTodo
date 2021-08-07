@@ -1,4 +1,4 @@
-import { AuthProps } from "../../service/authService";
+import { AuthProps } from "../../service/auth.service";
 import {
   LoginRequestAction,
   LoginSuccessAction,
@@ -17,7 +17,7 @@ const loginRequest = (authProps: AuthProps): LoginRequestAction => {
     payload: authProps,
   };
 };
-const loginSucces = (authProps: AuthProps): LoginSuccessAction => {
+const loginSuccess = (authProps: AuthProps): LoginSuccessAction => {
   return {
     type: Actions.LoginSuccess,
     payload: authProps,
@@ -55,4 +55,14 @@ const refreshTokenSuccess = (
     type: Actions.RefreshTokenSuccess,
     payload: refreshToken,
   };
+};
+
+export const AuthAction = {
+  refreshTokenSuccess,
+  refreshTokenRequest,
+  setUser,
+  logOut,
+  setIsAuth,
+  loginSuccess,
+  loginRequest,
 };

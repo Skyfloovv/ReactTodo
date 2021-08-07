@@ -1,6 +1,6 @@
 import { Action } from "redux";
 import { Actions } from "./constant";
-import { AuthProps } from "../../service/authService";
+import { AuthProps } from "../../service/auth.service";
 import { User } from "../../models/user.model";
 
 export interface LoginRequestAction

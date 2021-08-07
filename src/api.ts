@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { FilterType, ITodo } from "./models/todo.model";
-import { AuthProps } from "./service/authService";
+import { AuthProps } from "./service/auth.service";
 
 export const axiosInstance = axios.create({
   headers: {
