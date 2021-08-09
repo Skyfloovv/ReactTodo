@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import "./TodoInput.scss";
 import { Button, TextField } from "@material-ui/core";
 import Header from "../../../Header/Header";

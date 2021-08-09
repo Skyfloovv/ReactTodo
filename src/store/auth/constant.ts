@@ -1,4 +1,4 @@
-export enum Actions {
+export enum authActions {
   LoginRequest = "loginRequest",
   LoginSuccess = "loginSuccess",
   SetIsAuth = "setIsAuth",
@@ -6,4 +6,6 @@ export enum Actions {
   SetUser = "setUser",
   RefreshTokenRequest = "refreshTokenRequest",
   RefreshTokenSuccess = "refreshTokenSuccess",
+  RegisterRequest = "registerRequest",
+  RegisterSuccess = "registerSuccess",
 }

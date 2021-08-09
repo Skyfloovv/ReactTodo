@@ -1,42 +1,60 @@
-import { AuthProps } from "../../service/auth.service";
+import { AuthProps, RegisterProps } from "../../service/auth.service";
 import {
   LoginRequestAction,
   LoginSuccessAction,
   LogOutAction,
   RefreshTokenRequestAction,
   RefreshTokenSuccessAction,
+  RegisterRequestAction,
+  RegisterSuccessAction,
   SetIsAuthAction,
   SetUserAction,
 } from "./action.types";
-import { Actions } from "./constant";
+import { authActions } from "./constant";
 import { User } from "../../models/user.model";
 
 const loginRequest = (authProps: AuthProps): LoginRequestAction => {
   return {
-    type: Actions.LoginRequest,
+    type: authActions.LoginRequest,
     payload: authProps,
   };
 };
 const loginSuccess = (authProps: AuthProps): LoginSuccessAction => {
   return {
-    type: Actions.LoginSuccess,
+    type: authActions.LoginSuccess,
     payload: authProps,
+  };
+};
+const RegisterRequest = (
+  registerProps: RegisterProps
+): RegisterRequestAction => {
+  return {
+    type: authActions.RegisterRequest,
+    payload: registerProps,
+  };
+};
+const RegisterSuccess = (
+  registerProps: RegisterProps
+): RegisterSuccessAction => {
+  return {
+    type: authActions.RegisterSuccess,
+    payload: registerProps,
   };
 };
 const setIsAuth = (isAuth: boolean): SetIsAuthAction => {
   return {
-    type: Actions.SetIsAuth,
+    type: authActions.SetIsAuth,
     payload: isAuth,
   };
 };
 const logOut = (): LogOutAction => {
   return {
-    type: Actions.LogOut,
+    type: authActions.LogOut,
   };
 };
 const setUser = (user: User): SetUserAction => {
   return {
-    type: Actions.SetUser,
+    type: authActions.SetUser,
     payload: user,
   };
 };
@@ -44,7 +62,7 @@ const refreshTokenRequest = (
   refreshToken: string
 ): RefreshTokenRequestAction => {
   return {
-    type: Actions.RefreshTokenRequest,
+    type: authActions.RefreshTokenRequest,
     payload: refreshToken,
   };
 };
@@ -52,7 +70,7 @@ const refreshTokenSuccess = (
   refreshToken: string
 ): RefreshTokenSuccessAction => {
   return {
-    type: Actions.RefreshTokenSuccess,
+    type: authActions.RefreshTokenSuccess,
     payload: refreshToken,
   };
 };
@@ -65,4 +83,6 @@ export const AuthAction = {
   setIsAuth,
   loginSuccess,
   loginRequest,
+  RegisterRequest,
+  RegisterSuccess,
 };

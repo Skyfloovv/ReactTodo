@@ -18,7 +18,9 @@ import {
   EditTodoRequestAction,
   EditTodoSuccessAction,
   FilterTodosAction,
+  GetCurrentTodoAction,
   SearchTodosAction,
+  SetCurrentTodoAction,
   SetFilterTodosAction,
   SetIsLoadingAction,
   SetTmpTodoAction,
@@ -145,12 +147,28 @@ const filterTodos = (filterType: FilterType): FilterTodosAction => {
     },
   };
 };
+const setCurrentTodo = (todo: ITodo): SetCurrentTodoAction => {
+  return {
+    type: Actions.SetCurrentTodo,
+    payload: {
+      currentTodo: todo,
+    },
+  };
+};
+const getCurrentTodo = (id: string): GetCurrentTodoAction => {
+  return {
+    type: Actions.GetCurrentTodo,
+    payload: id,
+  };
+};
 
 export const TodoAction = {
   isLoading,
   setTmpTodo,
   filterTodos,
   searchTodos,
+  getCurrentTodo,
+  setCurrentTodo,
   setFilterTodos,
   addTodoRequest,
   addTodoSuccess,

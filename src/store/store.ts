@@ -10,13 +10,16 @@ import {
   useSelector as useReduxSelector,
 } from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import { metaFieldsSaga } from "./todos/saga";
+import { todoSaga } from "./todos/saga";
+import { authSaga } from "./auth/saga";
+import { authReducer } from "./auth/auth";
 const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
   todo: todosReducer,
+  auth: authReducer,
 });
 
 // SAGA////////////////////////////////////
@@ -25,7 +28,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 export function* rootSaga() {
-  yield all([fork(metaFieldsSaga)]);
+  yield all([fork(todoSaga), fork(authSaga)]);
 }
 
 sagaMiddleware.run(rootSaga);

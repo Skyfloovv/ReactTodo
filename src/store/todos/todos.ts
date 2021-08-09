@@ -8,6 +8,7 @@ export interface IinitialState {
   isLoading: boolean;
   filterTodos: ITodo[];
   tmpTodo: ITodo | null;
+  currentTodo: ITodo | null;
 }
 
 const initialState: IinitialState = {
@@ -15,6 +16,7 @@ const initialState: IinitialState = {
   isLoading: true,
   filterTodos: [],
   tmpTodo: null,
+  currentTodo: null,
 };
 
 export const todosReducer = (
@@ -22,28 +24,6 @@ export const todosReducer = (
   action: ReducerTodoActionType
 ): IinitialState => {
   switch (action.type) {
-    case Actions.AddTodo_Success: {
-      return {
-        ...state,
-        todos: [
-          ...state.todos,
-          {
-            ...action.payload,
-          },
-        ],
-      };
-    }
-    case Actions.EditTodo_Success: {
-      return {
-        ...state,
-        todos: state.todos.map((item) => {
-          if (item._id === action.payload._id) {
-            return action.payload;
-          }
-          return item;
-        }),
-      };
-    }
     case Actions.SetTodos: {
       return {
         ...state,
@@ -53,27 +33,10 @@ export const todosReducer = (
     case Actions.LoadTodos: {
       return state;
     }
-    case Actions.CheckTodo_Success: {
-      return {
-        ...state,
-        todos: state.todos.map((item) => {
-          if (item._id === action.payload._id) {
-            return { ...action.payload };
-          }
-          return { ...item };
-        }),
-      };
-    }
     case Actions.SetTmpTodo: {
       return {
         ...state,
         tmpTodo: action.payload.tmpTodo,
-      };
-    }
-    case Actions.DeleteTodo_Success: {
-      return {
-        ...state,
-        todos: state.todos.filter((item) => item._id !== action.payload),
       };
     }
     case Actions.FilterTodos: {
@@ -96,16 +59,61 @@ export const todosReducer = (
         isLoading: action.payload.isLoading,
       };
     }
-    case Actions.DeleteAllTodo_Success: {
+    case Actions.SetCurrentTodo: {
       return {
         ...state,
-        todos: [],
+        currentTodo: action.payload.currentTodo,
       };
     }
     case Actions.SetFilterTodos: {
       return {
         ...state,
         filterTodos: action.payload.filterTodo,
+      };
+    }
+    case Actions.AddTodo_Success: {
+      return {
+        ...state,
+        todos: [
+          ...state.todos,
+          {
+            ...action.payload,
+          },
+        ],
+      };
+    }
+    case Actions.EditTodo_Success: {
+      return {
+        ...state,
+        todos: state.todos.map((item) => {
+          if (item._id === action.payload._id) {
+            return action.payload;
+          }
+          return item;
+        }),
+      };
+    }
+    case Actions.CheckTodo_Success: {
+      return {
+        ...state,
+        todos: state.todos.map((item) => {
+          if (item._id === action.payload._id) {
+            return { ...action.payload };
+          }
+          return { ...item };
+        }),
+      };
+    }
+    case Actions.DeleteTodo_Success: {
+      return {
+        ...state,
+        todos: state.todos.filter((item) => item._id !== action.payload),
+      };
+    }
+    case Actions.DeleteAllTodo_Success: {
+      return {
+        ...state,
+        todos: [],
       };
     }
     case Actions.DeleteCheckTodo_Success: {

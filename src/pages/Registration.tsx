@@ -2,19 +2,13 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { FC, useState } from "react";
-import { useDispatch } from "../store/store";
-import { AuthAction } from "../store/auth/action";
-import { useHistory } from "react-router-dom";
+import { FC } from "react";
 
 const Copyright: FC = () => {
   return (
@@ -60,35 +54,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LogIn: FC = () => {
+const Registration: FC = () => {
   const classes = useStyles();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const dispatch = useDispatch();
-  const history = useHistory();
-
-  const emailHandler: React.ChangeEventHandler<HTMLInputElement> = ({
-    target,
-  }) => {
-    if (target.value !== " ") {
-      setEmail(target.value);
-    }
-  };
-  const passwordHandler: React.ChangeEventHandler<HTMLInputElement> = ({
-    target,
-  }) => {
-    if (target.value !== " ") {
-      setPassword(target.value);
-    }
-  };
-  const submitData = async () => {
-    if (email && password) {
-      try {
-        await dispatch(AuthAction.loginRequest({ email, password }));
-        history.push("/");
-      } catch (e) {}
-    }
-  };
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -100,7 +67,7 @@ const LogIn: FC = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -112,9 +79,17 @@ const LogIn: FC = () => {
               label="Email Address"
               name="email"
               autoComplete="email"
-              value={email}
-              onChange={emailHandler}
               autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="name"
+              label="name"
+              id="name"
+              autoComplete="name"
             />
             <TextField
               variant="outlined"
@@ -125,34 +100,36 @@ const LogIn: FC = () => {
               label="Password"
               type="password"
               id="password"
-              value={password}
-              onChange={passwordHandler}
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="repeat_password"
+              label="Repeat password"
+              type="password"
+              id="repeat_password"
+              autoComplete="repeat_password"
             />
             <Button
+              type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={submitData}
             >
-              Sign In
+              Sign Up
             </Button>
             <Box mt={5}>
               <Copyright />
             </Box>
           </form>
         </div>
-        <Grid item xs={false} sm={4} md={7}>
-          <Link>Dont have Account? Register</Link>
-        </Grid>
       </Grid>
     </Grid>
   );
 };
 
-export default LogIn;
+export default Registration;

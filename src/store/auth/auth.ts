@@ -1,6 +1,6 @@
 import { User } from "../../models/user.model";
 import { ReducerAuthActionType } from "./action.types";
-import { Actions } from "./constant";
+import { authActions } from "./constant";
 export interface InitialState {
   User: User | null;
   isAuth: boolean;
@@ -8,7 +8,7 @@ export interface InitialState {
 
 const initialState: InitialState = {
   User: null,
-  isAuth: true,
+  isAuth: false,
 };
 
 export const authReducer = (
@@ -16,25 +16,25 @@ export const authReducer = (
   action: ReducerAuthActionType
 ): InitialState => {
   switch (action.type) {
-    case Actions.LoginRequest: {
+    case authActions.RegisterSuccess: {
       return { ...state };
     }
-    case Actions.LoginSuccess: {
+    case authActions.LoginSuccess: {
       return { ...state };
     }
-    case Actions.LogOut: {
+    case authActions.LogOut: {
       return { ...state };
     }
-    case Actions.RefreshTokenRequest: {
+    case authActions.RefreshTokenSuccess: {
       return { ...state };
     }
-    case Actions.RefreshTokenSuccess: {
-      return { ...state };
+    case authActions.SetIsAuth: {
+      return {
+        ...state,
+        isAuth: action.payload,
+      };
     }
-    case Actions.SetIsAuth: {
-      return { ...state };
-    }
-    case Actions.SetUser: {
+    case authActions.SetUser: {
       return { ...state };
     }
     default:

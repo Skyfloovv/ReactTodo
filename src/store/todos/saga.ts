@@ -9,9 +9,10 @@ import {
   DeleteCheckTodoRequestAction,
   DeleteTodoRequestAction,
   EditTodoRequestAction,
+  GetCurrentTodoAction,
   LoadTodosAction,
 } from "./action.types";
-import { todoApi } from "../../api";
+import { todoApi } from "../../service/todo.service";
 
 function* fetchTodos(action: LoadTodosAction): any {
   try {
@@ -79,6 +80,14 @@ function* checkTodo(action: CheckTodoRequestAction): any {
     console.log(e);
   }
 }
+function* getCurrentTodo(action: GetCurrentTodoAction): any {
+  try {
+    const { data } = yield call(todoApi.getTodo, action.payload);
+    yield put(TodoAction.setCurrentTodo(data));
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 export function* watchGetListTodo() {
   yield takeLatest(Actions.LoadTodos, fetchTodos);
@@ -101,15 +110,19 @@ export function* watchRemoveCheckTodos() {
 export function* watchCheckTodo() {
   yield takeLatest(Actions.CheckTodo_Request, checkTodo);
 }
+export function* watchGetCurrentTodo() {
+  yield takeLatest(Actions.GetCurrentTodo, getCurrentTodo);
+}
 
-export function* metaFieldsSaga() {
+export function* todoSaga() {
   yield all([
-    watchGetListTodo(),
     watchAddTodo(),
+    watchEditTodo(),
+    watchCheckTodo(),
     watchRemoveTodo(),
     watchRemoveTodos(),
-    watchEditTodo(),
+    watchGetListTodo(),
+    watchGetCurrentTodo(),
     watchRemoveCheckTodos(),
-    watchCheckTodo(),
   ]);
 }

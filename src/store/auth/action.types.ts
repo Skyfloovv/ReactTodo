@@ -1,29 +1,37 @@
 import { Action } from "redux";
-import { Actions } from "./constant";
-import { AuthProps } from "../../service/auth.service";
+import { authActions } from "./constant";
+import { AuthProps, RegisterProps } from "../../service/auth.service";
 import { User } from "../../models/user.model";
 
 export interface LoginRequestAction
-  extends Action<typeof Actions.LoginRequest> {
+  extends Action<typeof authActions.LoginRequest> {
   payload: AuthProps;
 }
 export interface LoginSuccessAction
-  extends Action<typeof Actions.LoginSuccess> {
+  extends Action<typeof authActions.LoginSuccess> {
   payload: AuthProps;
 }
-export interface SetIsAuthAction extends Action<typeof Actions.SetIsAuth> {
+export interface RegisterRequestAction
+  extends Action<typeof authActions.RegisterRequest> {
+  payload: RegisterProps;
+}
+export interface RegisterSuccessAction
+  extends Action<typeof authActions.RegisterSuccess> {
+  payload: RegisterProps;
+}
+export interface SetIsAuthAction extends Action<typeof authActions.SetIsAuth> {
   payload: boolean;
 }
-export interface LogOutAction extends Action<typeof Actions.LogOut> {}
-export interface SetUserAction extends Action<typeof Actions.SetUser> {
+export interface LogOutAction extends Action<typeof authActions.LogOut> {}
+export interface SetUserAction extends Action<typeof authActions.SetUser> {
   payload: User;
 }
 export interface RefreshTokenRequestAction
-  extends Action<typeof Actions.RefreshTokenRequest> {
+  extends Action<typeof authActions.RefreshTokenRequest> {
   payload: string;
 }
 export interface RefreshTokenSuccessAction
-  extends Action<typeof Actions.RefreshTokenSuccess> {
+  extends Action<typeof authActions.RefreshTokenSuccess> {
   payload: string;
 }
 
@@ -34,4 +42,6 @@ export type ReducerAuthActionType =
   | LogOutAction
   | SetUserAction
   | RefreshTokenRequestAction
-  | RefreshTokenSuccessAction;
+  | RefreshTokenSuccessAction
+  | RegisterRequestAction
+  | RegisterSuccessAction;

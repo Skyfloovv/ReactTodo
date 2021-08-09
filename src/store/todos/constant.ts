@@ -18,4 +18,6 @@ export enum Actions {
   SetFilterTodos = "setFilterTodos",
   DeleteCheckTodo_Request = "deleteCheckTodo_Request",
   DeleteCheckTodo_Success = "deleteCheckTodo_Success",
+  SetCurrentTodo = "setCurrentTodo",
+  GetCurrentTodo = "getCurrentTodo",
 }

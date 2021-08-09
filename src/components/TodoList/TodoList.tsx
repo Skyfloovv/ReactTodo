@@ -14,6 +14,7 @@ import { FilterType, ITodo } from "../../models/todo.model";
 import { TodoAction } from "../../store/todos/action";
 import { useDispatch, useSelector } from "../../store/store";
 import { Actions } from "../../store/todos/constant";
+import WithPreloader from "./WithPreloader";
 
 const TodoList: FC<any> = () => {
   const [modalType, setModalType] = useState<ModalType>();
@@ -132,7 +133,7 @@ const TodoList: FC<any> = () => {
       />
       <TodoListHeaderAction searchTodo={searchTodo} filter={filter} />
       <List className="TodoList">
-        {filterTodos.length ? (
+        {filterTodos?.length ? (
           filterTodos.map((item, idx) => {
             return (
               <ListItem key={idx}>
@@ -153,15 +154,18 @@ const TodoList: FC<any> = () => {
               alignItems: "center",
             }}
           >
-            {isLoading ? (
-              <div>
-                <Backdrop open={isLoading}>
-                  <CircularProgress color="inherit" />
-                </Backdrop>
-              </div>
-            ) : (
+            <WithPreloader isLoading={isLoading}>
               <span>Todo List is empty</span>
-            )}
+            </WithPreloader>
+            {/*{isLoading ? (*/}
+            {/*  <div>*/}
+            {/*    <Backdrop open={isLoading}>*/}
+            {/*      <CircularProgress color="inherit" />*/}
+            {/*    </Backdrop>*/}
+            {/*  </div>*/}
+            {/*) : (*/}
+            {/*  <span>Todo List is empty</span>*/}
+            {/*)}*/}
           </ListItem>
         )}
       </List>
