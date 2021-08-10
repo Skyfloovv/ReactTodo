@@ -1,6 +1,10 @@
 import { ITodo } from "../models/todo.model";
 import { axiosInstance } from "../api";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
+import { useDispatch } from "react-redux";
+import { AuthAction } from "../store/auth/action";
+import { useHistory } from "react-router-dom";
+import store from "../store/store";
 
 export interface AuthProps {
   email: string;
@@ -12,6 +16,30 @@ export interface RegisterProps {
   password: string;
   name: string;
 }
+axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
+  const token = authApi.getToken();
+  if (token) config.headers["Authorization"] = `Bearer ` + token;
+  config.headers["Authorization"] = token;
+  return config;
+});
+axiosInstance.interceptors.response.use(
+  (response) => {
+    console.log(response);
+    return response;
+  },
+  async (error) => {
+    console.log(error);
+    if (error.response.status === 401) {
+      const responce = await authApi.RefreshToken();
+      if (!responce.data) return error;
+      authApi.setToken(responce.data.accessToken);
+      store.dispatch(AuthAction.setIsAuth(true));
+      error.config.headers["Authorization"] = authApi.getToken();
+      return axiosInstance.request(error.config);
+    }
+    return error;
+  }
+);
 
 export const authApi = {
   isAuth() {
@@ -30,7 +58,12 @@ export const authApi = {
   LogOut() {
     localStorage.removeItem("token");
   },
-  Registration(User: RegisterProps): Promise<AxiosResponse<string>> {
+  Registration(
+    User: RegisterProps
+  ): Promise<AxiosResponse<{ accessToken: string }>> {
     return axiosInstance.post("auth/registration", { ...User });
+  },
+  RefreshToken(): Promise<AxiosResponse<{ accessToken: string }>> {
+    return axiosInstance.post("auth/refresh-token");
   },
 };

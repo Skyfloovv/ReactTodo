@@ -14,7 +14,7 @@ const TodoInfo: FC = () => {
   useEffect(() => {
     if (!params.id) return;
     dispatch(TodoAction.getCurrentTodo(params.id));
-  }, [params]);
+  }, [params, dispatch]);
 
   return (
     <WithPreloader isLoading={!todo}>

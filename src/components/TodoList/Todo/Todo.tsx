@@ -4,6 +4,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import "./Todo.scss";
 import { ITodoProps } from "../../../models/todo.model";
 import { Link } from "react-router-dom";
+import { useStyles } from "./todo.styles";
 
 export const Todo: FC<ITodoProps> = ({
   _id,
@@ -13,6 +14,7 @@ export const Todo: FC<ITodoProps> = ({
   OnChecked,
   editTodo,
 }) => {
+  const s = useStyles();
   return (
     <div className="Todo">
       <Link className="link" to={"todo/" + _id}>
@@ -20,6 +22,7 @@ export const Todo: FC<ITodoProps> = ({
       </Link>
       <div className="todo-actions">
         <Checkbox
+          className={s.todoCheckInput}
           checked={checked}
           onChange={() => OnChecked({ _id, checked: !checked, text })}
         />

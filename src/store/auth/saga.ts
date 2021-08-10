@@ -10,6 +10,7 @@ function* registerRequest(action: RegisterRequestAction): any {
     const { token } = yield call(authApi.Registration, action.payload);
     yield call(authApi.setToken, token);
     yield put(AuthAction.RegisterSuccess(token));
+    yield put(AuthAction.setIsAuth(true));
   } catch (e) {
     console.log(e);
   }
@@ -20,7 +21,6 @@ function* loginRequest(action: LoginRequestAction): any {
     const { data } = yield call(authApi.LogIn, action.payload);
     console.log("login", data.accessToken);
     yield call(authApi.setToken, data.accessToken);
-    //yield put(AuthAction.loginSuccess(res.data));
     yield put(AuthAction.setIsAuth(true));
   } catch (e) {
     console.log(e);

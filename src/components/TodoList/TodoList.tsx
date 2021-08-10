@@ -15,6 +15,7 @@ import { TodoAction } from "../../store/todos/action";
 import { useDispatch, useSelector } from "../../store/store";
 import { Actions } from "../../store/todos/constant";
 import WithPreloader from "./WithPreloader";
+import { useStyles } from "./todoList.styles";
 
 const TodoList: FC<any> = () => {
   const [modalType, setModalType] = useState<ModalType>();
@@ -31,6 +32,7 @@ const TodoList: FC<any> = () => {
   const modalClose = () => {
     ConfirmModalToggle();
   };
+  const s = useStyles();
 
   useEffect(() => {
     dispatch({ type: Actions.LoadTodos });
@@ -125,14 +127,14 @@ const TodoList: FC<any> = () => {
     modalClose();
   };
   return (
-    <div className="TodoListContainer">
+    <div className={s.TodoListContainer}>
       <TodoInput
         newTodo={createNewTodo}
         todo={newTodo}
         saveChanges={saveChanges}
       />
       <TodoListHeaderAction searchTodo={searchTodo} filter={filter} />
-      <List className="TodoList">
+      <List className={s.TodoList}>
         {filterTodos?.length ? (
           filterTodos.map((item, idx) => {
             return (
