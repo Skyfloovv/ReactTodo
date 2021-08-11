@@ -1,9 +1,6 @@
-import { ITodo } from "../models/todo.model";
 import { axiosInstance } from "../api";
-import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
-import { useDispatch } from "react-redux";
+import { AxiosResponse, AxiosRequestConfig } from "axios";
 import { AuthAction } from "../store/auth/action";
-import { useHistory } from "react-router-dom";
 import store from "../store/store";
 
 export interface AuthProps {
@@ -28,16 +25,20 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.log(error);
-    if (error.response.status === 401) {
-      const responce = await authApi.RefreshToken();
-      if (!responce.data) return error;
-      authApi.setToken(responce.data.accessToken);
-      store.dispatch(AuthAction.setIsAuth(true));
-      error.config.headers["Authorization"] = authApi.getToken();
-      return axiosInstance.request(error.config);
+    if (error.response.status !== 401) return error;
+    if (
+      error.config.url === "auth/refresh-token" ||
+      error.message === "refreshToken exist"
+    ) {
+      store.dispatch(AuthAction.setAuthFailed(true));
+      return error;
     }
-    return error;
+    const responce = await authApi.RefreshToken();
+    if (!responce.data) return error;
+    authApi.setToken(responce.data.accessToken);
+    store.dispatch(AuthAction.setIsAuth(true));
+    error.config.headers["Authorization"] = authApi.getToken();
+    return axiosInstance.request(error.config);
   }
 );
 

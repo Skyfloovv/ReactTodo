@@ -6,17 +6,16 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     width: "100%",
+    color: theme.palette.text.secondary,
   },
   footerListAction: {
     "& button": {
-      backgroundColor: "red!important",
       margin: "5px",
     },
   },
 
   headerListAction: {
     "& button": {
-      backgroundColor: "red!important",
       margin: "5px",
     },
   },

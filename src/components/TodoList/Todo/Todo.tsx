@@ -1,10 +1,11 @@
 import { FC } from "react";
-import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
-import "./Todo.scss";
 import { ITodoProps } from "../../../models/todo.model";
 import { Link } from "react-router-dom";
 import { useStyles } from "./todo.styles";
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from "../../../assets/DeleteIcon";
+import EditIcon from "../../../assets/EditIcon";
 
 export const Todo: FC<ITodoProps> = ({
   _id,
@@ -16,18 +17,32 @@ export const Todo: FC<ITodoProps> = ({
 }) => {
   const s = useStyles();
   return (
-    <div className="Todo">
-      <Link className="link" to={"todo/" + _id}>
-        <span className={checked ? "strike" : ""}>{text}</span>
+    <div className={s.todo}>
+      <Link to={"todo/" + _id}>
+        <span className={checked ? s.strike : ""}>{text}</span>
       </Link>
       <div className="todo-actions">
         <Checkbox
-          className={s.todoCheckInput}
+          color="primary"
           checked={checked}
           onChange={() => OnChecked({ _id, checked: !checked, text })}
         />
-        <Button children={"edit"} onClick={() => editTodo(_id)} />
-        <Button children={"delete"} onClick={() => deleteTodo(_id)} />
+        <IconButton
+          color="primary"
+          aria-label="upload picture"
+          component="span"
+          onClick={() => editTodo(_id)}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          color="primary"
+          aria-label="upload picture"
+          component="span"
+          onClick={() => deleteTodo(_id)}
+        >
+          <DeleteIcon />
+        </IconButton>
       </div>
     </div>
   );

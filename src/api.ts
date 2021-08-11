@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-import { FilterType, ITodo } from "./models/todo.model";
 
 export const axiosInstance = axios.create({
   headers: {

@@ -22,6 +22,10 @@ export interface RegisterSuccessAction
 export interface SetIsAuthAction extends Action<typeof authActions.SetIsAuth> {
   payload: boolean;
 }
+export interface SetAuthFailedAction
+  extends Action<typeof authActions.SetAuthFailed> {
+  payload: boolean;
+}
 export interface LogOutAction extends Action<typeof authActions.LogOut> {}
 export interface SetUserAction extends Action<typeof authActions.SetUser> {
   payload: User;
@@ -38,6 +42,7 @@ export interface RefreshTokenSuccessAction
 export type ReducerAuthActionType =
   | LoginRequestAction
   | LoginSuccessAction
+  | SetAuthFailedAction
   | SetIsAuthAction
   | LogOutAction
   | SetUserAction

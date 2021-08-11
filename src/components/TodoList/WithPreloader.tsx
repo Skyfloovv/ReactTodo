@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC } from "react";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 
 const WithPreloader: FC<{ isLoading: boolean; children: any }> = ({

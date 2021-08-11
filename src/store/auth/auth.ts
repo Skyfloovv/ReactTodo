@@ -4,11 +4,13 @@ import { authActions } from "./constant";
 export interface InitialState {
   User: User | null;
   isAuth: boolean;
+  authFailed: boolean;
 }
 
 const initialState: InitialState = {
   User: null,
   isAuth: false,
+  authFailed: false,
 };
 
 export const authReducer = (
@@ -32,6 +34,13 @@ export const authReducer = (
       return {
         ...state,
         isAuth: action.payload,
+      };
+    }
+    case authActions.SetAuthFailed: {
+      return {
+        ...state,
+        authFailed: action.payload,
+        isAuth: !action.payload,
       };
     }
     case authActions.SetUser: {

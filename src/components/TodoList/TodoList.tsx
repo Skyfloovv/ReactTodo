@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import "./TodoList.scss";
-import { Backdrop, CircularProgress, List, ListItem } from "@material-ui/core";
+import { List, ListItem } from "@material-ui/core";
 import { Modal, ModalType } from "../Modal";
 import { useDebounce } from "../../hooks/debounce";
 import {
@@ -159,15 +158,6 @@ const TodoList: FC<any> = () => {
             <WithPreloader isLoading={isLoading}>
               <span>Todo List is empty</span>
             </WithPreloader>
-            {/*{isLoading ? (*/}
-            {/*  <div>*/}
-            {/*    <Backdrop open={isLoading}>*/}
-            {/*      <CircularProgress color="inherit" />*/}
-            {/*    </Backdrop>*/}
-            {/*  </div>*/}
-            {/*) : (*/}
-            {/*  <span>Todo List is empty</span>*/}
-            {/*)}*/}
           </ListItem>
         )}
       </List>

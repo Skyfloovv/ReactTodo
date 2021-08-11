@@ -1,37 +1,20 @@
 import React, { FC } from "react";
-import "./App.css";
 import PageRouter from "./components/PageRouter";
-import { makeStyles, MuiThemeProvider } from "@material-ui/core";
-import { createTheme1 } from "./styles/theme";
-
-export const useStyles = makeStyles((theme) => ({
-  App: {
-    width: "100%",
-    minHeight: "100vh",
-    textAlign: "center",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: theme.palette.grey[700],
-  },
-}));
+import { ThemeProvider } from "@material-ui/core/styles";
+import { createThemeObject } from "./styles";
 
 const App: FC = () => {
-  const theme = createTheme1({
+  const theme = createThemeObject({
     direction: "ltr",
-    responsiveFontSizes: true,
     roundedCorners: true,
+    responsiveFontSizes: true,
     theme: "DARK",
   });
-  const s = useStyles();
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <div className={s.App}>
-        <PageRouter />
-      </div>
-    </MuiThemeProvider>
+    <ThemeProvider theme={theme}>
+      <PageRouter />
+    </ThemeProvider>
   );
 };
 

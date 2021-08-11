@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, useEffect, useState } from "react";
-import "./TodoInfo.scss";
+// import "./TodoInfo.scss";
 import { useDispatch, useSelector } from "../../../../store/store";
 import { Link, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, Typography } from "@material-ui/core";

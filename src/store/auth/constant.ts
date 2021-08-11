@@ -2,6 +2,7 @@ export enum authActions {
   LoginRequest = "loginRequest",
   LoginSuccess = "loginSuccess",
   SetIsAuth = "setIsAuth",
+  SetAuthFailed = "setAuthFailed",
   LogOut = "logOut",
   SetUser = "setUser",
   RefreshTokenRequest = "refreshTokenRequest",
