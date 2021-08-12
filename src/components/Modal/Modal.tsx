@@ -11,33 +11,10 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { useStyles } from "./modal.styles";
-import {
-  DialogTitleProps,
-  ModalProps,
-  ModalType,
-} from "./interfaces/modal.interfaces";
+import { ModalProps, ModalType } from "./interfaces/modal.interfaces";
 import { useSelector } from "../../store/store";
 import { FilterType, ITodo } from "../../models/todo.model";
 import { getTextForType } from "../utils";
-
-const DialogTitle1 = (props: DialogTitleProps) => {
-  const { children, onClose, ...other } = props;
-  const classes = useStyles();
-  return (
-    <DialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
 
 export const Modal: FC<ModalProps> = ({
   isOpen,
@@ -53,7 +30,29 @@ export const Modal: FC<ModalProps> = ({
     if (!tmpTodo) return;
     setTodo(tmpTodo);
   }, [tmpTodo]);
-
+  const apply = () => {
+    switch (type) {
+      case ModalType.Delete: {
+        handleDelete(tmpTodo?._id!);
+        break;
+      }
+      case ModalType.DeleteAll: {
+        handleDelete(FilterType.ALL);
+        break;
+      }
+      case ModalType.DeleteChecked: {
+        handleDelete(FilterType.DONE);
+        break;
+      }
+      case ModalType.Edit: {
+        handleEdit(todo!);
+        break;
+      }
+      default:
+        handleClose();
+        break;
+    }
+  };
   const editTodoHandler: React.ChangeEventHandler<HTMLInputElement> = ({
     target,
   }) => {
@@ -68,9 +67,18 @@ export const Modal: FC<ModalProps> = ({
       aria-labelledby="customized-dialog-title"
       open={isOpen}
     >
-      <DialogTitle1 id="customized-dialog-title" onClose={handleClose}>
-        {getTextForType(type)}
-      </DialogTitle1>
+      <DialogTitle disableTypography className={s.root}>
+        <Typography variant="h6">{getTextForType(type)}</Typography>
+        {handleClose ? (
+          <IconButton
+            aria-label="close"
+            className={s.closeButton}
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </DialogTitle>
       <DialogContent className={s.dialogContent} dividers>
         {type !== ModalType.Edit ? (
           <Typography gutterBottom>
@@ -89,34 +97,7 @@ export const Modal: FC<ModalProps> = ({
           {"Cancel"}
         </Button>
 
-        <Button
-          autoFocus
-          variant="contained"
-          onClick={() => {
-            switch (type) {
-              case ModalType.Delete: {
-                handleDelete(tmpTodo?._id!);
-                break;
-              }
-              case ModalType.DeleteAll: {
-                handleDelete(FilterType.ALL);
-                break;
-              }
-              case ModalType.DeleteChecked: {
-                handleDelete(FilterType.DONE);
-                break;
-              }
-              case ModalType.Edit: {
-                handleEdit(todo!);
-                break;
-              }
-              default:
-                handleClose();
-                break;
-            }
-          }}
-          color="primary"
-        >
+        <Button autoFocus variant="contained" onClick={apply} color="primary">
           {"Apply"}
         </Button>
       </DialogActions>

@@ -26,6 +26,9 @@ export interface SetAuthFailedAction
   extends Action<typeof authActions.SetAuthFailed> {
   payload: boolean;
 }
+export interface SetErrorAction extends Action<typeof authActions.SetError> {
+  payload: string | null;
+}
 export interface LogOutAction extends Action<typeof authActions.LogOut> {}
 export interface SetUserAction extends Action<typeof authActions.SetUser> {
   payload: User;
@@ -49,4 +52,5 @@ export type ReducerAuthActionType =
   | RefreshTokenRequestAction
   | RefreshTokenSuccessAction
   | RegisterRequestAction
-  | RegisterSuccessAction;
+  | RegisterSuccessAction
+  | SetErrorAction;

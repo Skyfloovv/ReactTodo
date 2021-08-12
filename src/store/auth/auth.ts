@@ -5,12 +5,14 @@ export interface InitialState {
   User: User | null;
   isAuth: boolean;
   authFailed: boolean;
+  error: string | null;
 }
 
 const initialState: InitialState = {
   User: null,
   isAuth: false,
   authFailed: false,
+  error: null,
 };
 
 export const authReducer = (
@@ -18,18 +20,6 @@ export const authReducer = (
   action: ReducerAuthActionType
 ): InitialState => {
   switch (action.type) {
-    case authActions.RegisterSuccess: {
-      return { ...state };
-    }
-    case authActions.LoginSuccess: {
-      return { ...state };
-    }
-    case authActions.LogOut: {
-      return { ...state };
-    }
-    case authActions.RefreshTokenSuccess: {
-      return { ...state };
-    }
     case authActions.SetIsAuth: {
       return {
         ...state,
@@ -43,9 +33,13 @@ export const authReducer = (
         isAuth: !action.payload,
       };
     }
-    case authActions.SetUser: {
-      return { ...state };
+    case authActions.SetError: {
+      return {
+        ...state,
+        error: action.payload,
+      };
     }
+
     default:
       return { ...state };
   }

@@ -1,18 +1,19 @@
 import { FC } from "react";
-import "./TodoInput.scss";
 import { Button, TextField } from "@material-ui/core";
 import Header from "../../../Header/Header";
 import { TodoInputProps } from "../../../../models/todo.model";
+import { useStyles } from "../todo.styles";
 
 export const TodoInput: FC<TodoInputProps> = ({
   newTodo,
   saveChanges,
   todo,
 }) => {
+  const s = useStyles();
   return (
-    <div className="TodoInput">
+    <div className={s.todoInput}>
       <Header text="Todo Input" />
-      <div className="TodoForm">
+      <div className={s.todoForm}>
         <TextField label={"New Todo"} value={todo} onChange={newTodo} />
         <Button
           variant="contained"

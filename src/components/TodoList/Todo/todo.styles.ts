@@ -35,4 +35,20 @@ export const useStyles = makeStyles((theme) => ({
     textDecoration: "line-through",
     color: theme.palette.primary.light,
   },
+
+  todoInput: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "100%",
+  },
+  todoForm: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    "& > div": {
+      paddingBottom: "5px",
+    },
+  },
 }));

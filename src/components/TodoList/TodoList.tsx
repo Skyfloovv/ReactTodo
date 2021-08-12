@@ -91,6 +91,7 @@ const TodoList: FC<any> = () => {
     setSearch(target.value);
   };
   const openModalForDelete = (typeOrId: FilterType | string): void => {
+    console.log("open modal", typeOrId);
     switch (typeOrId) {
       case FilterType.ALL: {
         setModalType(ModalType.DeleteAll);
@@ -104,7 +105,6 @@ const TodoList: FC<any> = () => {
         const deleteTodo = todos.find((item) => item._id === typeOrId);
         dispatch(TodoAction.setTmpTodo(deleteTodo!));
         setModalType(ModalType.Delete);
-        ConfirmModalToggle();
       }
     }
     ConfirmModalToggle();

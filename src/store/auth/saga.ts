@@ -12,18 +12,20 @@ function* registerRequest(action: RegisterRequestAction): any {
     yield put(AuthAction.RegisterSuccess(token));
     yield put(AuthAction.setIsAuth(true));
   } catch (e) {
-    console.log(e);
+    yield put(AuthAction.setError(e.response.data.message));
+    console.log(e.response.data.message);
   }
 }
 function* loginRequest(action: LoginRequestAction): any {
   try {
     console.log("login");
-    const { data } = yield call(authApi.LogIn, action.payload);
-    console.log("login", data.accessToken);
+    const res = yield call(authApi.LogIn, action.payload);
+    const { data } = res;
     yield call(authApi.setToken, data.accessToken);
     yield put(AuthAction.setIsAuth(true));
   } catch (e) {
-    console.log(e);
+    yield put(AuthAction.setAuthFailed(true));
+    yield put(AuthAction.setError(e.response.data.message));
   }
 }
 

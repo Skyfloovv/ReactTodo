@@ -14,7 +14,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import React, { FC, useState } from "react";
 import { useDispatch } from "../store/store";
 import { AuthAction } from "../store/auth/action";
-import { useHistory } from "react-router-dom";
 
 const Copyright: FC = () => {
   return (
@@ -65,7 +64,6 @@ const LogIn: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const emailHandler: React.ChangeEventHandler<HTMLInputElement> = ({
     target,
@@ -84,9 +82,13 @@ const LogIn: FC = () => {
   const submitData = async () => {
     if (email && password) {
       try {
-        await dispatch(AuthAction.loginRequest({ email, password }));
-        history.push("/");
-      } catch (e) {}
+        const res = await dispatch(
+          AuthAction.loginRequest({ email, password })
+        );
+        console.log("res", res);
+      } catch (e) {
+        console.log("ololo", e);
+      }
     }
   };
 

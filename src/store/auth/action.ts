@@ -8,6 +8,7 @@ import {
   RegisterRequestAction,
   RegisterSuccessAction,
   SetAuthFailedAction,
+  SetErrorAction,
   SetIsAuthAction,
   SetUserAction,
 } from "./action.types";
@@ -54,6 +55,12 @@ const setAuthFailed = (isAuthFailed: boolean): SetAuthFailedAction => {
     payload: isAuthFailed,
   };
 };
+const setError = (error: string | null): SetErrorAction => {
+  return {
+    type: authActions.SetError,
+    payload: error,
+  };
+};
 const logOut = (): LogOutAction => {
   return {
     type: authActions.LogOut,
@@ -86,6 +93,7 @@ export const AuthAction = {
   refreshTokenSuccess,
   refreshTokenRequest,
   setUser,
+  setError,
   logOut,
   setIsAuth,
   loginSuccess,

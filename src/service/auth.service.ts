@@ -21,16 +21,16 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log(response);
     return response;
   },
   async (error) => {
-    if (error.response.status !== 401) return error;
+    if (error.response.status !== 401) return Promise.reject(error);
     if (
       error.config.url === "auth/refresh-token" ||
       error.message === "refreshToken exist"
     ) {
       store.dispatch(AuthAction.setAuthFailed(true));
+      store.dispatch(AuthAction.setError(error.response.data.message));
       return error;
     }
     const responce = await authApi.RefreshToken();

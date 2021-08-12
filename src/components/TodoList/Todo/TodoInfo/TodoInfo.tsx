@@ -1,9 +1,8 @@
-import React, { Dispatch, FC, useEffect, useState } from "react";
-// import "./TodoInfo.scss";
+import React, { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "../../../../store/store";
 import { Link, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, Typography } from "@material-ui/core";
-import { ITodo } from "../../../../models/todo.model";
+
 import WithPreloader from "../../WithPreloader";
 import { TodoAction } from "../../../../store/todos/action";
 
@@ -20,7 +19,7 @@ const TodoInfo: FC = () => {
     <WithPreloader isLoading={!todo}>
       <Card>
         <CardHeader>
-          <Link to="/">Back</Link>
+          <Link to="/">"awdw"</Link>
         </CardHeader>
         <CardContent>
           <Typography variant="h5" component="h2">
