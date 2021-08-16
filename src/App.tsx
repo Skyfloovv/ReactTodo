@@ -1,8 +1,7 @@
 import React, { FC } from "react";
-import PageRouter from "./components/PageRouter";
+import PageRouter from "./components/router/PageRouter";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { createThemeObject } from "./styles";
-import { SnackBarError } from "./components/snackbar/snackBar";
 
 const App: FC = () => {
   const theme = createThemeObject({

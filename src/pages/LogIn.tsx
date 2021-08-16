@@ -82,13 +82,8 @@ const LogIn: FC = () => {
   const submitData = async () => {
     if (email && password) {
       try {
-        const res = await dispatch(
-          AuthAction.loginRequest({ email, password })
-        );
-        console.log("res", res);
-      } catch (e) {
-        console.log("ololo", e);
-      }
+        await dispatch(AuthAction.loginRequest({ email, password }));
+      } catch (e) {}
     }
   };
 

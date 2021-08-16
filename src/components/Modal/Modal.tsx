@@ -86,6 +86,8 @@ export const Modal: FC<ModalProps> = ({
           </Typography>
         ) : (
           <TextField
+            variant="outlined"
+            margin="normal"
             label={"Edit"}
             onChange={editTodoHandler}
             value={todo?.text}

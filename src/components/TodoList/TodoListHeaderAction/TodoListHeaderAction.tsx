@@ -15,7 +15,12 @@ export const TodoListHeaderAction: FC<TodoListHeaderActionProps> = ({
   return (
     <div className={s.headerListAction}>
       <div>
-        <TextField label={"Search"} onChange={searchTodo} />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          label={"Search"}
+          onChange={searchTodo}
+        />
       </div>
       <div>
         <Button

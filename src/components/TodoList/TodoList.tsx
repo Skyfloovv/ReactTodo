@@ -35,12 +35,12 @@ const TodoList: FC<any> = () => {
 
   useEffect(() => {
     dispatch({ type: Actions.LoadTodos });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!todos) return;
     dispatch(TodoAction.setFilterTodos(todos));
-  }, [todos]);
+  }, [todos, dispatch]);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -48,7 +48,7 @@ const TodoList: FC<any> = () => {
     } else {
       dispatch(TodoAction.filterTodos(FilterType.ALL));
     }
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, dispatch]);
 
   const createNewTodo: React.ChangeEventHandler<HTMLInputElement> = ({
     target,

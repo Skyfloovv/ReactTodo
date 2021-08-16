@@ -1,6 +1,7 @@
 import { User } from "../../models/user.model";
 import { ReducerAuthActionType } from "./action.types";
 import { authActions } from "./constant";
+import { authApi } from "../../service/auth.service";
 export interface InitialState {
   User: User | null;
   isAuth: boolean;
@@ -10,7 +11,7 @@ export interface InitialState {
 
 const initialState: InitialState = {
   User: null,
-  isAuth: false,
+  isAuth: authApi.isAuth(),
   authFailed: false,
   error: null,
 };

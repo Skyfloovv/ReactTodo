@@ -1,10 +1,21 @@
 import React, { FC } from "react";
-import { Backdrop, CircularProgress } from "@material-ui/core";
+import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
 
+const useStyles = makeStyles((theme) => ({
+  preloader: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
+    width: "100%",
+    height: "100%",
+  },
+}));
 const WithPreloader: FC<{ isLoading: boolean; children: any }> = ({
   isLoading,
   children,
 }) => {
+  const s = useStyles();
   return (
     <>
       {isLoading ? (
@@ -12,7 +23,7 @@ const WithPreloader: FC<{ isLoading: boolean; children: any }> = ({
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (
-        <div>{children}</div>
+        <div className={s.preloader}>{children}</div>
       )}
     </>
   );

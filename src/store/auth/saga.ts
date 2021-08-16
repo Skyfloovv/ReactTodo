@@ -1,5 +1,9 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
-import { LoginRequestAction, RegisterRequestAction } from "./action.types";
+import {
+  LoginRequestAction,
+  LogOutAction,
+  RegisterRequestAction,
+} from "./action.types";
 import { authApi } from "../../service/auth.service";
 import { AuthAction } from "./action";
 import { authActions } from "./constant";
@@ -28,13 +32,21 @@ function* loginRequest(action: LoginRequestAction): any {
     yield put(AuthAction.setError(e.response.data.message));
   }
 }
-
+function* logOut(action: LogOutAction): any {
+  try {
+    authApi.LogOut();
+    yield put(AuthAction.setIsAuth(false));
+  } catch (e) {}
+}
 function* watchRegisterRequest() {
   yield takeLatest(authActions.RegisterRequest, registerRequest);
 }
 function* watchLoginRequest() {
   yield takeLatest(authActions.LoginRequest, loginRequest);
 }
+function* watchLogout() {
+  yield takeLatest(authActions.LogOut, logOut);
+}
 export function* authSaga() {
-  yield all([watchRegisterRequest(), watchLoginRequest()]);
+  yield all([watchRegisterRequest(), watchLoginRequest(), watchLogout()]);
 }

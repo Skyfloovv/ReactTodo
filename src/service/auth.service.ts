@@ -57,7 +57,10 @@ export const authApi = {
     localStorage.setItem("token", token);
   },
   LogOut() {
+    const res = axiosInstance.post("auth/logout");
+    if (!res) return;
     localStorage.removeItem("token");
+    return res;
   },
   Registration(
     User: RegisterProps
