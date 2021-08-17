@@ -6,11 +6,10 @@ import {
   CardContent,
   CardHeader,
   IconButton,
-  makeStyles,
   Typography,
 } from "@material-ui/core";
 
-import WithPreloader from "../../WithPreloader";
+import WithPreloader from "../../../common/WithPreloader";
 import { TodoAction } from "../../../../store/todos/action";
 import EditIcon from "../../../../assets/EditIcon";
 import DeleteIcon from "../../../../assets/DeleteIcon";
@@ -18,14 +17,7 @@ import { useModal } from "../../../../hooks/useModal";
 import { Modal, ModalType } from "../../../Modal";
 import { ITodo } from "../../../../models/todo.model";
 import Checkbox from "@material-ui/core/Checkbox";
-
-const useStyles = makeStyles((theme) => ({
-  card: {
-    display: "flex",
-    flexDirection: "column",
-    width: "40%",
-  },
-}));
+import { useStyles } from "./todoInfo.styles";
 
 const TodoInfo: FC = () => {
   const params = useParams<{ id: string }>();

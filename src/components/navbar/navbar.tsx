@@ -1,26 +1,10 @@
 import React, { FC } from "react";
-import { makeStyles, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "../../store/store";
 import { AuthAction } from "../../store/auth/action";
+import { useStyles } from "./navar.style";
 
-const useStyles = makeStyles((theme) => ({
-  nav: {
-    display: "flex",
-    backgroundColor: theme.palette.background.default,
-    width: "100%",
-    height: "50px",
-    justifyContent: "center",
-    alignItems: "center",
-    color: theme.palette.text.primary,
-  },
-  content: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "space-between",
-    margin: "0 10px 0 10px",
-  },
-}));
 const Navbar: FC = () => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const s = useStyles();

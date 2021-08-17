@@ -13,7 +13,7 @@ import { FilterType, ITodo } from "../../models/todo.model";
 import { TodoAction } from "../../store/todos/action";
 import { useDispatch, useSelector } from "../../store/store";
 import { Actions } from "../../store/todos/constant";
-import WithPreloader from "./WithPreloader";
+import WithPreloader from "../common/WithPreloader";
 import { useStyles } from "./todoList.styles";
 
 const TodoList: FC<any> = () => {

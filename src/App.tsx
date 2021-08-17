@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import PageRouter from "./components/router/PageRouter";
+import PageRouter from "./router/PageRouter";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { createThemeObject } from "./styles";
 
